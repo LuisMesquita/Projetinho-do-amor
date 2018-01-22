@@ -58,7 +58,7 @@ int removerFuncionario(char cpf[11], Funcionario *repositorioFuncionario){
 }
 
 FuncionarioResponse procurar(char cpf[11], Funcionario *repositorioFuncionario){
-    Funcionario f, f1;
+    Funcionario f;
     FuncionarioResponse response;
     f1.status = 0
     int indice;

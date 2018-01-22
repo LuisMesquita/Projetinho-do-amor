@@ -76,7 +76,7 @@ int removerCliente(char cpf[11], Cliente *repositorioCliente){
 
 //funçao buscar cliente usa o indice do vetor encontrado no getIndice para retornar o cliente naquela posiçao!!
  ClientResponse buscarCliente(char cpf[11], Cliente *repositorioCliente){
-    Cliente c, c1;
+    Cliente c;
     ClientResponse response;
     c1.status = 0;
     int indice;

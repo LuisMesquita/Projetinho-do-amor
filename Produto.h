@@ -59,7 +59,7 @@ int getIndiceCategoria(char categoria[20], Produto *repositorioProduto){ // RETO
 	}
 }
 ProductResponse procurarProduto(char codigo, Produto *repositorioProduto){ // RETORNA O PRODUTO DO CÓDIGO PESQUISADO.
-	Produto p, p1;
+	Produto p;
 	ProductResponse response;
 	p1.status = 0;
 	int indice;
