@@ -1,8 +1,10 @@
+#ifndef PRODUTO_H
+#define PRODUTO_H
 
 #include <stdio.h>
 #include <string.h>
 
-typedef struct{
+typedef struct {
 	int qtd_Itens;
 	int status;
 	float valor;
@@ -18,25 +20,30 @@ typedef struct{
         int error;
 }ProductResponse;
 
-void cadastrarProduto(char codigo[10], char nome[20], float valor,int qtd_Itens, char tamanho[2], char descricao[250],int *incremento, Produto *repositorioProduto){
-	Produto p;
-	strcpy(p.codigo, codigo);
-	strcpy(p.nome, nome);
-	p.valor = valor;
-	p.qtd_Itens = qtd_Itens;
-	p.status = 1;
-	strcpy(p.tamanho, tamanho);
-    strcpy(p.descricao, descricao);
+int cadastrarProduto(Produto p, int incremento, Produto *repositorioProduto);
+int getIndiceProduto(char codigo[10], Produto *repositorioProduto);
+int getIndiceCategoria(char categoria[20], Produto *repositorioProduto);
+ProductResponse procurarProduto(char codigo[10], Produto *repositorioProduto);
+void salvarProduto(Produto *repositorioProduto, int incremento);
+void lerProduto(Produto *repositorioProduto, int incremento);
 
-	repositorioProduto[incremento] = p;
+int cadastrarProduto(Produto p, int incremento, Produto *repositorioProduto){
+	ProductResponse response;
+	response.produto = p;
+	response.produto.status = 1;
+	repositorioProduto[incremento] = response.produto;
+	
+	response.error = 1; // Cadastrado com sucesso;
+	
+	return response.error;
 }
 
-int getIndiceProduto(char codigo[10], Produto *repositorioProduto){ // RETORNA O INDICE DO PRODUTO COM O CÓDIGO PESQUISADO.
+int getIndiceProduto(char codigo[10], Produto *repositorioProduto){ // RETORNA O INDICE DO PRODUTO COM O Cï¿½DIGO PESQUISADO.
 	int indice;
 
 	char comp[10];
 	for(indice = 0; indice < 1000;){
-		strcpy(comp, repositorioProduto[indice]->codigo);
+		strcpy(comp, repositorioProduto[indice].codigo);
 		if(strcmp(comp, codigo)==0){
 			return indice;
 		}
@@ -49,7 +56,7 @@ int getIndiceCategoria(char categoria[20], Produto *repositorioProduto){ // RETO
 	int indice;
 	char comp[20];
 	for(indice = 0; indice < 1000;){
-		strcpy(comp, repositorioProduto[indice]->categoria);
+		strcpy(comp, repositorioProduto[indice].categoria);
 		if(strcmp(comp, categoria)==0){
 			return indice;
 		}
@@ -58,60 +65,42 @@ int getIndiceCategoria(char categoria[20], Produto *repositorioProduto){ // RETO
 		}
 	}
 }
-ProductResponse procurarProduto(char codigo, Produto *repositorioProduto){ // RETORNA O PRODUTO DO CÓDIGO PESQUISADO.
-	Produto p;
+ProductResponse procurarProduto(char codigo[10], Produto *repositorioProduto){ // RETORNA O PRODUTO DO Cï¿½DIGO PESQUISADO.
+	Produto p, p1;
 	ProductResponse response;
 	p1.status = 0;
 	int indice;
 	indice = getIndiceProduto(codigo, repositorioProduto);
-	p = repositorioProduto[indice];
-	if(p.status == 1){
-		response.produto = p;
-		response.error = NULL;  //   TRATAR AS MENSAGENS DE ERRO NO MAIN.
+	if(strcmp(codigo, repositorioProduto[indice].codigo) == 0){
+		p = repositorioProduto[indice];
+		if(p.status == 1){
+			response.produto = p;
+			response.error = 0;  //   TRATAR AS MENSAGENS DE ERRO NO MAIN. /  PRODUTO ENCONTRADO
+		}
+		else{
+			response.produto = p1;
+			response.error = 1; //   TRATAR AS MENSAGENS DE ERRO NO MAIN. /  PRODUTO Nï¿½O ENCONTRADO
+		}
 	}
 	else{
-		response.produto = p1;
-		response.error = 1; //   TRATAR AS MENSAGENS DE ERRO NO MAIN.
+		response.error = 1; // TRATAR AS MENSAGENS DE EROO NO MAIN /  PRODUTO Nï¿½O ENCONTRADO
 	}
-
 	return response;
 }
-int removerProduto(char codigo[10], Produto *repositorioProduto){ // REMOVE O PRODUTO COM CÓDIGO INDICADO, ALTERANDO O STATUS DO PRODUTO.
-	ProductResponse p;
-	p = procurarProduto(codigo, repositorioProduto);
-	if (p.error == NULL) {
-        p.produto.status = 0;
-        return 0;
-	} else {
-        return p.error;
-	}
+
+
+void salvarProduto(Produto *repositorioProduto, int incremento){
+	FILE *arq;
+	arq = fopen("produtos.txt", "wb");
+	fwrite(repositorioProduto, sizeof(Produto), incremento, arq);
+	fclose(arq);
 }
-int removerItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
-    ProductResponse p;
-	p = procurarProduto(codigo, repositorioProduto);
-	if(p.produto.status == 1){
-        if(p.produto.qtd_Itens >= qtd_Itens){
-            p.produto.qtd_Itens -= qtd_Itens;
-            p.error = 0;
-        }
-        else{
-            p.error = 2;
-        }
-	}
-	else{
-        p.error = 1;
-	}
-	return p.error;
+
+void lerProduto(Produto *repositorioProduto, int incremento){
+	FILE *arq;
+	arq = fopen("produtos.txt", "rb");
+	fread(repositorioProduto, sizeof(Produto), incremento, arq);
+	fclose(arq);
 }
-int adicionarItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
-    ProductResponse p;
-	p = procurarProduto(codigo, repositorioProduto);
-	if(p.produto.status == 1){
-        p.produto.qtd_Itens += qtd_Itens;
-        p.error = 0;
-	}
-	else{
-        p.error = 1;
-	}
-	return p.error;
-}
+
+#endif

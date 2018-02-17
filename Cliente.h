@@ -1,6 +1,10 @@
+#ifndef CLIENTE_H
+#define CLIENTE_H
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "Produto.h"
 
 typedef struct{
     char nome[30];
@@ -8,7 +12,6 @@ typedef struct{
     char email[30];
     char endereco[50];
     char cpf[11];
-    char nick[10];
     char senha[8];
     int status;
 }Cliente;
@@ -18,12 +21,22 @@ typedef struct{
     int error;
 }ClientResponse;
 
-//funçao getIndice varre o repositorio cliente atraves do cpf e retorna o numero da posiçao do vetor em que ele se encontra!!
-int getIndice(char cpf[11], Cliente *repositorioCliente){ //Nao esquecer de setar no main o repositório!!!
+int getIndice(char cpf[11], Cliente *repositorioCliente);
+int cadastrarCliente(Cliente c, Cliente* repositorioCliente, int incremento);
+ClientResponse procurarCliente(char cpf[11], Cliente *repositorioCliente);
+int removerCliente(char cpf[11], Cliente *repositorioCliente);
+int alterarCadastroCliente(char cpf[11], char email[30], char senha[8], Cliente ca, Cliente *repositorioCliente);
+int alterarSenhaCliente(char cpf[11], char email[30], char novaSenha[8], Cliente *repositorioCliente);
+int loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente);
+void salvarCliente(Cliente *repositorioCliente, int incremento);
+void lerCliente(Cliente *repositorioCliente, int incremento);
+
+//funï¿½ao getIndice varre o repositorio cliente atraves do cpf e retorna o numero da posiï¿½ao do vetor em que ele se encontra!!
+int getIndice(char cpf[11], Cliente *repositorioCliente){ //Nao esquecer de setar no main o repositï¿½rio!!!
     char comp[11];
     int indice;
     for(indice=0; indice<1000;){
-        comp = repositorioCliente[indice]->cpf;
+        strcpy(comp, repositorioCliente[indice].cpf);
         if(strcmp(cpf, comp) == 0){
             return indice;
         }
@@ -31,41 +44,39 @@ int getIndice(char cpf[11], Cliente *repositorioCliente){ //Nao esquecer de seta
             indice++;
         }
     }
+    return -1;
 }
 
-void cadastrarCliente(char nome[30],int idade,char email[30], char endereco[50],char cpf[11],char nick[10], char senha[8], Cliente *repositorioCliente, int *incremento){
+int cadastrarCliente(Cliente c, Cliente* repositorioCliente, int incremento){
+    ClientResponse response;
+	response.cliente = c;
+	response.cliente.status = 1;
+    repositorioCliente[incremento] = response.cliente;
+    
+	response.error = 1; // cadastrado com sucesso.
+    salvarCliente(repositorioCliente, incremento+1);
+	return response.error;
+}
+
+ClientResponse procurarCliente(char cpf[11], Cliente *repositorioCliente){
     Cliente c;
-    strcpy(c.nome, nome);
-    c.idade=idade;
-    strcpy(c.email, email);
-    strcpy(c.endereco, endereco);
-    strcpy(c.cpf, cpf);
-    strcpy(c.nick, nick);
-    strcpy(c.senha, senha);
-    c.status = 1;
-
-    repositorioCliente[incremento] = c;
-}
-
-int removerItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
-    ProductResponse p;
-	p = procurarProduto(codigo, repositorioProduto);
-	if(p.produto.status == 1){
-        if(p.produto.qtd_Itens >= qtd_Itens){
-            p.produto.qtd_Itens -= qtd_Itens;
-            p.error = 0;
-        }
-        else{
-            p.error = 2;
-        }
+    ClientResponse response;
+    int indice;
+    indice = getIndice(cpf, repositorioCliente);
+    c = repositorioCliente[indice];
+    if(c.status == 1){
+        response.cliente = c;
+        response.error = 0; // Cliente encontrado 
+    }
+    else{
+    	response.error = 1; // Cliente nï¿½o encontrado
 	}
-	return p.error;
+	return response;
 }
-
 int removerCliente(char cpf[11], Cliente *repositorioCliente){
     ClientResponse c;
-    c = buscarCliente(cpf, repositorioCliente);
-    if(c.error == NULL){
+    c = procurarCliente(cpf, repositorioCliente);
+    if(c.error == 0){
         c.cliente.status = 0;
         return 0;
     }
@@ -74,30 +85,67 @@ int removerCliente(char cpf[11], Cliente *repositorioCliente){
     }
 }
 
-//funçao buscar cliente usa o indice do vetor encontrado no getIndice para retornar o cliente naquela posiçao!!
- ClientResponse buscarCliente(char cpf[11], Cliente *repositorioCliente){
-    Cliente c;
-    ClientResponse response;
-    c1.status = 0;
-    int indice;
-    indice = getIndice(cpf);
-    c = repositorioCliente[indice];
-    if(c.status == 1){
-        response.cliente = c;
-        response.error = NULL;
-    }
-    else{
-    	response.error = 1;
+int alterarCadastroCliente(char cpf[11], char email[30], char senha[8], Cliente ca, Cliente *repositorioCliente){
+	ClientResponse response;
+	response = procurarCliente(cpf, repositorioCliente);
+	if(response.error == 0){
+		if(strcmp(response.cliente.email, email) == 0 && strcmp(response.cliente.senha, senha) == 0){
+			int indice;
+			indice = getIndice(cpf, repositorioCliente);
+			repositorioCliente[indice] = ca;
+			response.error = 3; // Cliente alterado com sucesso
+		}
+		else{
+			response.error = 4; // E-mail ou senha invï¿½lidos, cliente nï¿½o alterado
+		}
 	}
-	return response;
+	return response.error;
 }
+
+int alterarSenhaCliente(char cpf[11], char email[30], char novaSenha[8], Cliente *repositorioCliente){
+	ClientResponse response;
+	response = procurarCliente(cpf, repositorioCliente);
+	if(response.cliente.status == 1 && strcmp(response.cliente.email, email) == 0){
+		strcpy(response.cliente.senha, novaSenha);
+		return 1; //Senha alterada com sucesso.
+	}
+	else{
+		return 0; //Usuï¿½rio inativo.
+	}
+}
+
+//funï¿½ao buscar cliente usa o indice do vetor encontrado no getIndice para retornar o cliente naquela posiï¿½ao!!
+
 int loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente){
-    int indice;
+    int indice; 
     indice = getIndice(cpf, repositorioCliente);
-    if(strcmp(senha, repositorioCliente[indice]->senha) == 0){
-        return 1;
-    }
-    else{
-        return 0;
-    }
+    printf("\nIndice Login %i", indice);
+	if(indice >= 0){
+    	if(strcmp(senha, repositorioCliente[indice].senha) == 0 && repositorioCliente[indice].status == 1){
+        	return 1;
+    	}
+    	else{
+        	return 0;
+    	}
+	}
+	else{
+		return 0;
+	}
 }
+
+void salvarCliente(Cliente *repositorioCliente, int incremento){
+	FILE *arq;
+	arq = fopen("clientes.txt", "wb");
+	fwrite(repositorioCliente, sizeof(Cliente), incremento, arq);
+	fclose(arq);		
+}
+
+void lerCliente(Cliente *repositorioCliente, int incremento){
+	FILE *arq;
+	arq = fopen("clientes.txt", "rb");
+	fread(repositorioCliente, sizeof(Cliente), incremento, arq);
+	fclose(arq);
+}
+
+
+#endif
