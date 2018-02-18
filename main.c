@@ -10,16 +10,16 @@
 void printarMenuPrincipal(){
     system("cls");
 	printf("BEM-VINDO A LOLJA!");
-	printf("\nSELECIONE UMA OPï¿½ï¿½O: ");
+	printf("\nSELECIONE UMA OPÇÃO: ");
 	printf("\n1 - Cliente");
-	printf("\n2 - Funcionï¿½rio");
+	printf("\n2 - Funcionário");
 	printf("\n3 - Administrador");
 	printf("\n4 - Sair do sistema\n");
 }
 
 void printarMenuCliente() {
     system("cls");
-    printf("SELECIONE UMA OPï¿½ï¿½O: ");
+    printf("SELECIONE UMA OPÇÃOO: ");
     printf("\n1 - Login");
     printf("\n2 - Cadastro");
     printf("\n3 - Voltar\n");
@@ -37,7 +37,14 @@ int main(int argc, char *argv[]) {
         Cliente c;
 		char senhaAdmin[5];
 		char idAdmin[5];
+		char senhaCliente[8];
+		char senhaClienteComp[8];
+		char cpf[11];
+		char senha[8];
+		int retornoSenhaCliente;
+		int retornoCadastroCliente;
 		int retornoValidacao;
+		//int incremento = 1;
         printarMenuPrincipal();
         scanf("%i", &op);
 
@@ -51,15 +58,16 @@ int main(int argc, char *argv[]) {
                     case 1: //Login
                         countErros = 0;
 						do{
-                            char cpf[11], senha[8];
+                            
                             system("cls");
 							getchar();
-							printf("Digite seu CPF (somente nï¿½meros): ");							
+							printf("Digite seu CPF (somente números): ");
 							gets(cpf);
 							printf("Digite sua senha: ");
 							gets(senha);
 
 							retornoCliente = loginCliente(cpf, senha, repositorioCliente);
+							//printf("%i", retornoCliente);
 							if(retornoCliente != 1){
 								printf("\nSenha Incorreta, digite novamente!\n");
 								countErros++;
@@ -75,7 +83,41 @@ int main(int argc, char *argv[]) {
                     break;
 
                     case 2: //Cadastro
-                        printf("cadastro filha d aputa");
+                    	getchar();
+                    	system("cls");
+                        printf("Digite seu nome: ");
+                        gets(c.nome);
+                        printf("Digite sua idade: ");
+                        scanf("%i", &c.idade);
+                        getchar();
+                        printf("Digite seu e-mail: ");
+                        gets(c.email);
+                        printf("Digite seu CPF (somente números): ");
+                        gets(c.cpf);
+                        printf("Digite seu endereço: ");
+                        gets(c.endereco);
+                        do{
+                        	printf("Digite uma senha com 8 digitos: ");
+                        	gets(senhaCliente);
+                        	printf("Confirme a senha: ");
+                        	gets(senhaClienteComp);
+                        	
+                        	retornoSenhaCliente = strcmp(senhaCliente, senhaClienteComp);
+                        	if(retornoSenhaCliente != 0){
+                        		printf("Senhas digitas são diferentes! Digite novamente!\n");
+							}
+						}while(retornoSenhaCliente != 0);
+						strcpy(c.senha, senhaCliente);
+						retornoCadastroCliente = cadastrarCliente(c, &repositorioCliente, incremento);
+						
+						if(retornoCadastroCliente == 1){
+							incremento++;
+							system("cls");
+							printf("Cadastrado com sucesso!\n");
+							printf("%s", repositorioCliente[1].cpf);
+							system("pause");
+						}
+						
                     break;
 
                     default:

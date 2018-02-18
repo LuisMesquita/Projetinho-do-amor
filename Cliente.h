@@ -53,8 +53,8 @@ int cadastrarCliente(Cliente c, Cliente* repositorioCliente, int incremento){
 	response.cliente.status = 1;
     repositorioCliente[incremento] = response.cliente;
     
+    salvarCliente(repositorioCliente, incremento);
 	response.error = 1; // cadastrado com sucesso.
-    salvarCliente(repositorioCliente, incremento+1);
 	return response.error;
 }
 
@@ -119,7 +119,7 @@ int alterarSenhaCliente(char cpf[11], char email[30], char novaSenha[8], Cliente
 int loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente){
     int indice; 
     indice = getIndice(cpf, repositorioCliente);
-    printf("\nIndice Login %i", indice);
+    //printf("\nIndice Login %i", indice);
 	if(indice >= 0){
     	if(strcmp(senha, repositorioCliente[indice].senha) == 0 && repositorioCliente[indice].status == 1){
         	return 1;
