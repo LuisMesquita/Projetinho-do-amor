@@ -32,6 +32,7 @@ int adicionarItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto);
 void salvarFuncionario(Funcionario *repositorioFuncionario, int incremento);
 void lerFuncionario(Funcionario *repositorioFuncionario, int incremento);
 int validadarAdmin(char id[5], char senha[5]);
+int alterarCadastroProduto(char codigo[10], Produto pa, Produto *repositorioProduto);
 
 int validadarAdmin(char id[5], char senha[5]){
 	char senhaComp[10] = "admin";
@@ -154,6 +155,22 @@ int adicionarItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
         p.error = 1;
 	}
 	return p.error;
+}
+int alterarCadastroProduto(char codigo[10], Produto pa, Produto *repositorioProduto){
+	ProductResponse response;
+	response = procurarProduto(codigo[10], repositorioProduto);
+	if(response.error == 0){
+		if(strcmp(response.produto.codigo, codigo) == 0){
+			int indice;
+			indice = getIndiceProduto(codigo, repositorioProduto);
+			repositorioProduto[indice] = pa;
+			response.error = 3; //Produto alterado com sucesso
+		}
+		else{
+			response.error = 4; // Codigo invalido
+		}
+	}
+	return response.error;
 }
 
 void salvarFuncionario(Funcionario *repositorioFuncionario, int incremento){

@@ -6,6 +6,85 @@
 #include "Cliente.h"
 #include "Funcionario.h"
 #include "Produto.h"
+#include "LojaGeek.h"
+#include "Sistema.h"
+
+FuncionarioResponse loginFuncionario(){
+	getchar();
+	int contErros = 0;
+	system("cls");
+	printf("LOGIN");
+	char cpfFuncionario [11];
+	char senhaFuncionario[8];
+	FuncionarioResponse retornoFuncionario;
+	retornoFuncionario.error= 0;
+	do{
+		getchar();
+		printf("\nDigite seu CPF (somente números): ");
+		gets(cpfFuncionario);
+		printf("Digite sua senha: ");
+		gets(senhaFuncionario);
+		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
+		if(retornoFuncionario.error != 1){
+			printf("CPF ou senha incorretos, digite novamente!");
+		}
+		contErros++;
+	}while(retornoFuncionario.error != 1 && contErros <=3 );
+	return retornoFuncionario.funcionario;
+}
+
+void alterarProduto(){
+    Produto pa;
+    char codigo[10];
+    getchar();
+    system("cls");
+    printf("Digite o código do produto a ser alterado: ");
+    gets(codigo);
+
+    printf("Digite o nome do produto");
+    gets(pa.nome);
+    printf("Digite o valor do produto");
+    scanf("%f", &pa.valor);
+    printf("Digite a descrição do produto");
+    gets(pa.descricao);
+    printf("Digite a categoria do produto");
+    gets(pa.categoria);
+    printf("Digite o tamanho do produto");
+    gets(pa.tamanho);
+    printf("Digite o codigo do produto");
+    gets(pa.codigo);
+    printf("Digite a quantidade que deseja adicionar");
+    scanf("%i", &pa.qtd_Itens);
+    alterarCadastroProduto(codigo, pa, repositorioProduto);
+}
+
+void removerProduto(){
+    getchar();
+    system("cls");
+    printf("digite o codigo do produto que deseja remover");
+    gets(codigoProduto);
+    removerProduto(codigoProduto, repositorioProduto);
+}
+
+void criarProduto(){
+    getchar();
+    system("cls");
+    printf("Digite o nome do produto");
+    gets(p.nome);
+    printf("Digite o valor do produto");
+    scanf("%f", &p.valor);
+    printf("Digite a descrição do produto");
+    gets(p.descricao);
+    printf("Digite a categoria do produto");
+    gets(p.categoria);
+    printf("Digite o tamanho do produto");
+    gets(p.tamanho);
+    printf("Digite o codigo do produto");
+    gets(p.codigo);
+    printf("Digite a quantidade que deseja adicionar");
+    scanf("%i", &p.qtd_Itens);
+    cadastrarProduto(p, incrementoProduto, repositorioProduto);
+}
 
 void printarMenuPrincipal(){
     system("cls");
@@ -181,25 +260,40 @@ int main(int argc, char *argv[]) {
             break;
 
             case 2:
-                getchar();
-				system("cls");
-				printf("LOGIN");
-				char cpfFuncionario [11];
-				char senhaFuncionario[8];
-				FuncionarioResponse retornoFuncionario;
-				do{
-					getchar();
-					printf("\nDigite seu CPF (somente números): ");
-					gets(cpfFuncionario);
-					printf("Digite sua senha: ");
-					gets(senhaFuncionario);
-					retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
-					if(retornoFuncionario.error != 1){
-						printf("CPF ou senha incorretos, digite novamente!");
-					}
-				}while(retornoFuncionario.error != 1);
+            	FuncionarioResponse funcionarioLogado;
+                
+                funcionarioLogado = loginFuncionario();
+                
+                if(funcionarioLogado.error == 1){
+                	printf("Funcionário não encontrado");
+                	break;
+				}
+				
 				system("cls");
 				printf("Bem vindo %s\n", retornoFuncionario.funcionario.nome);
+				PrintarMenuFuncinario();
+				scanf("%i", &opFuncionario);
+
+                Produto p;
+				switch (opFuncionario)
+				{
+                    case 1:
+                        criarProduto();  //adiciona um produto novo
+                        break;
+
+                    case 2:
+                        removerProduto(); //remove um produto existente
+                    break;
+
+                    case 3:
+                        alterarProduto(); //altera as caracteristicas de um produto
+                    break;
+
+                    case 4:
+                        break;
+                    break;
+
+				}
 				break;
 
 			case 3:
@@ -248,5 +342,4 @@ int main(int argc, char *argv[]) {
             break;
         }
 	}while(op != 4);
-
 }
