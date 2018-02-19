@@ -27,12 +27,13 @@ void printarMenuCliente() {
 
 int main(int argc, char *argv[]) {
 	int op;
-	static int incremento = 1;
+	int incremento = 1;
 	setlocale(LC_ALL, "Portuguese");
 	Cliente repositorioCliente[1000];
 	Produto repositorioProduto[1000];
 	Funcionario repositorioFuncionario[1000];
 	lerCliente(repositorioCliente, incremento);
+	
 	do{
         Cliente c;
 		char senhaAdmin[5];
@@ -58,7 +59,6 @@ int main(int argc, char *argv[]) {
                     case 1: //Login
                         countErros = 0;
 						do{
-                            
                             system("cls");
 							getchar();
 							printf("Digite seu CPF (somente números): ");
@@ -108,13 +108,13 @@ int main(int argc, char *argv[]) {
 							}
 						}while(retornoSenhaCliente != 0);
 						strcpy(c.senha, senhaCliente);
-						retornoCadastroCliente = cadastrarCliente(c, &repositorioCliente, incremento);
+						retornoCadastroCliente = cadastrarCliente(c, repositorioCliente, incremento);
 						
 						if(retornoCadastroCliente == 1){
 							incremento++;
 							system("cls");
 							printf("Cadastrado com sucesso!\n");
-							printf("%s", repositorioCliente[1].cpf);
+							//printf("%s", repositorioCliente[1].cpf);
 							system("pause");
 						}
 						
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
 				char senhaFuncionario[8];
 				do{
 					getchar();
-					printf("\nDigite seu CPF (somente nï¿½meros): ");
+					printf("\nDigite seu CPF (somente números): ");
 					gets(cpfFuncionario);
 					printf("Digite sua senha: ");
 					gets(senhaFuncionario);
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
 					retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
 
 					if(retornoValidacao != 1){
-						printf("ID ou senha invï¿½lidos, digite novamente: ");
+						printf("ID ou senha inválidos, digite novamente: ");
 						printf("\nDigite o ID do Administrador: ");
 						gets(idAdmin);
 						printf("Digite a senha do Administrador: ");
@@ -177,5 +177,3 @@ int main(int argc, char *argv[]) {
         }
 	}while(op != 4);
 }
-
-

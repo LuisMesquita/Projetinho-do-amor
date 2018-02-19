@@ -53,7 +53,7 @@ int cadastrarCliente(Cliente c, Cliente* repositorioCliente, int incremento){
 	response.cliente.status = 1;
     repositorioCliente[incremento] = response.cliente;
     
-    salvarCliente(repositorioCliente, incremento);
+    salvarCliente(repositorioCliente, incremento+1);
 	response.error = 1; // cadastrado com sucesso.
 	return response.error;
 }
@@ -136,8 +136,9 @@ int loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente){
 void salvarCliente(Cliente *repositorioCliente, int incremento){
 	FILE *arq;
 	arq = fopen("clientes.txt", "wb");
+	fseek(arq, 0, SEEK_END);
 	fwrite(repositorioCliente, sizeof(Cliente), incremento, arq);
-	fclose(arq);		
+	fclose(arq);
 }
 
 void lerCliente(Cliente *repositorioCliente, int incremento){

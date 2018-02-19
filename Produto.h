@@ -66,9 +66,8 @@ int getIndiceCategoria(char categoria[20], Produto *repositorioProduto){ // RETO
 	}
 }
 ProductResponse procurarProduto(char codigo[10], Produto *repositorioProduto){ // RETORNA O PRODUTO DO C�DIGO PESQUISADO.
-	Produto p, p1;
+	Produto p;
 	ProductResponse response;
-	p1.status = 0;
 	int indice;
 	indice = getIndiceProduto(codigo, repositorioProduto);
 	if(strcmp(codigo, repositorioProduto[indice].codigo) == 0){
@@ -78,7 +77,6 @@ ProductResponse procurarProduto(char codigo[10], Produto *repositorioProduto){ /
 			response.error = 0;  //   TRATAR AS MENSAGENS DE ERRO NO MAIN. /  PRODUTO ENCONTRADO
 		}
 		else{
-			response.produto = p1;
 			response.error = 1; //   TRATAR AS MENSAGENS DE ERRO NO MAIN. /  PRODUTO N�O ENCONTRADO
 		}
 	}
