@@ -25,7 +25,7 @@ int getIndiceCpf(char cpf[11], Funcionario *repositorioFuncionario);
 int cadastrarFuncionario(Funcionario f, int incremento, Funcionario *repositorioFuncionario);
 int removerFuncionario(char cpf[11], Funcionario *repositorioFuncionario);
 FuncionarioResponse procurarFuncionario(char cpf[11], Funcionario *repositorioFuncionario);
-int loginFuncionario(char cpf[11], char senha[8], Funcionario *repositorioFuncionario);
+FuncionarioResponse loginFuncionario(char cpf[11], char senha[8], Funcionario *repositorioFuncionario);
 int removerProduto(char codigo[10], Produto *repositorioProduto);
 int removerItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto);
 int adicionarItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto);
@@ -34,12 +34,9 @@ void lerFuncionario(Funcionario *repositorioFuncionario, int incremento);
 int validadarAdmin(char id[5], char senha[5]);
 
 int validadarAdmin(char id[5], char senha[5]){
-	char senhaComp[5];
-	char idComp[5];
-	
-	strcpy(senhaComp, "admin");
-	strcpy(idComp, "admin");
-	
+	char senhaComp[10] = "admin";
+	char idComp[10] = "admin";
+
 	if(strcmp(id, idComp) == 0 && strcmp(senha, senhaComp) == 0){
 		return 1; // Validado;
 	}
@@ -67,9 +64,9 @@ int cadastrarFuncionario(Funcionario f, int incremento, Funcionario *repositorio
 	response.funcionario = f;
 	response.funcionario.status = 1;
     repositorioFuncionario[incremento] = response.funcionario;
-    
+
     response.error = 1; // Funcionario Cadastrado com sucesso;
-    
+
     return response.error;
 }
 int removerFuncionario(char cpf[11], Funcionario *repositorioFuncionario){
@@ -91,7 +88,7 @@ FuncionarioResponse procurarFuncionario(char cpf[11], Funcionario *repositorioFu
     indice = getIndiceCpf(cpf, repositorioFuncionario);
     if(strcmp(cpf, repositorioFuncionario[indice].cpf) == 0 && repositorioFuncionario[indice].status == 1){
     	f = repositorioFuncionario[indice];
-    	
+
     	if(f.status == 1){
        		response.funcionario = f;
        		response.error = 0;
@@ -105,15 +102,18 @@ FuncionarioResponse procurarFuncionario(char cpf[11], Funcionario *repositorioFu
 	}
 	return response;
 }
-int loginFuncionario(char cpf[11], char senha[8], Funcionario *repositorioFuncionario){
+FuncionarioResponse loginFuncionario(char cpf[11], char senha[8], Funcionario *repositorioFuncionario){
+    FuncionarioResponse response;
     int indice;
     indice = getIndiceCpf(cpf, repositorioFuncionario);
     if(strcmp(senha, repositorioFuncionario[indice].senha == 0)){
-        return 1;
+        response.error = 1;
+        response.funcionario = repositorioFuncionario[indice];
     }
     else{
-        return 0;
+        response.error = 0;
     }
+    return response;
 }
 
 int removerProduto(char codigo[10], Produto *repositorioProduto){ // REMOVE O PRODUTO COM C�DIGO INDICADO, ALTERANDO O STATUS DO PRODUTO.
@@ -160,7 +160,7 @@ void salvarFuncionario(Funcionario *repositorioFuncionario, int incremento){
 	FILE *arq;
 	arq = fopen("funcionarios.txt", "wb");
 	fwrite(repositorioFuncionario, sizeof(Funcionario), incremento, arq);
-	fclose(arq);		
+	fclose(arq);
 }
 
 void lerFuncionario(Funcionario *repositorioFuncionario, int incremento){

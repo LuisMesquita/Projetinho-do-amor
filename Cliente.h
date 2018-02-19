@@ -27,7 +27,7 @@ ClientResponse procurarCliente(char cpf[11], Cliente *repositorioCliente);
 int removerCliente(char cpf[11], Cliente *repositorioCliente);
 int alterarCadastroCliente(char cpf[11], char email[30], char senha[8], Cliente ca, Cliente *repositorioCliente);
 int alterarSenhaCliente(char cpf[11], char email[30], char novaSenha[8], Cliente *repositorioCliente);
-int loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente);
+ClientResponse loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente);
 void salvarCliente(Cliente *repositorioCliente, int incremento);
 void lerCliente(Cliente *repositorioCliente, int incremento);
 
@@ -52,7 +52,7 @@ int cadastrarCliente(Cliente c, Cliente* repositorioCliente, int incremento){
 	response.cliente = c;
 	response.cliente.status = 1;
     repositorioCliente[incremento] = response.cliente;
-    
+
     salvarCliente(repositorioCliente, 1);
 	response.error = 1; // cadastrado com sucesso.
 	return response.error;
@@ -66,7 +66,7 @@ ClientResponse procurarCliente(char cpf[11], Cliente *repositorioCliente){
     c = repositorioCliente[indice];
     if(c.status == 1){
         response.cliente = c;
-        response.error = 0; // Cliente encontrado 
+        response.error = 0; // Cliente encontrado
     }
     else{
     	response.error = 1; // Cliente n�o encontrado
@@ -116,21 +116,24 @@ int alterarSenhaCliente(char cpf[11], char email[30], char novaSenha[8], Cliente
 
 //fun�ao buscar cliente usa o indice do vetor encontrado no getIndice para retornar o cliente naquela posi�ao!!
 
-int loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente){
-    int indice; 
+ClientResponse loginCliente(char cpf[11], char senha[8], Cliente *repositorioCliente){
+    ClientResponse response;
+    int indice;
     indice = getIndice(cpf, repositorioCliente);
     //printf("\nIndice Login %i", indice);
 	if(indice >= 0){
     	if(strcmp(senha, repositorioCliente[indice].senha) == 0 && repositorioCliente[indice].status == 1){
-        	return 1;
+        	response.cliente =  repositorioCliente[indice];
+        	response.error = 1;
     	}
     	else{
-        	return 0;
+        	response.error = 0;
     	}
 	}
 	else{
-		return 0;
+		response.error = 0;
 	}
+	return response;
 }
 
 void salvarCliente(Cliente *repositorioCliente, int incremento){

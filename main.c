@@ -25,6 +25,92 @@ void printarMenuCliente() {
     printf("\n3 - Voltar\n");
 }
 
+void printarMenuAdmin() {
+    system("cls");
+    printf("SELECIONE UMA OPÇÃOO: ");
+    printf("\n1 - Adicionar Funcionário");
+    printf("\n2 - Adicionar Produto");
+    printf("\n3 - Logout\n");
+}
+
+void criarCliente(int incremento, Cliente *repositorioCliente) {
+    Cliente c;
+    getchar();
+    system("cls");
+    printf("Digite seu nome: ");
+    gets(c.nome);
+    printf("Digite sua idade: ");
+    scanf("%i", &c.idade);
+    getchar();
+    printf("Digite seu e-mail: ");
+    gets(c.email);
+    printf("Digite seu CPF (somente números): ");
+    gets(c.cpf);
+    printf("Digite seu endereço: ");
+    gets(c.endereco);
+
+    char senhaCliente[20], senhaClienteComp[20];
+    int retornoSenhaCliente;
+    do{
+        printf("Digite uma senha com 8 digitos: ");
+        gets(senhaCliente);
+        printf("Confirme a senha: ");
+        gets(senhaClienteComp);
+
+        retornoSenhaCliente = strcmp(senhaCliente, senhaClienteComp);
+        if(retornoSenhaCliente != 0){
+            printf("Senhas digitas são diferentes! Digite novamente!\n");
+        }
+    }while(retornoSenhaCliente != 0);
+    strcpy(c.senha, senhaCliente);
+    int retornoCadastroCliente = cadastrarCliente(c, repositorioCliente, incremento);
+
+    if(retornoCadastroCliente == 1){
+        incremento++;
+        system("cls");
+        printf("Cadastrado com sucesso!\n");
+        //printf("%i", incremento);
+        system("pause");
+    }
+}
+
+void criarFuncionario(int incremento, Funcionario *repositorioFuncionario) {
+    system("cls");
+    Funcionario funcionario;
+    funcionario.status = 1;
+    getchar();
+    printf("Qual o nome do funcionário?\n");
+    gets(funcionario.nome);
+    printf("Qual o email?\n");
+    gets(funcionario.email);
+    printf("Qual o endereço?\n");
+    gets(funcionario.endereco);
+    printf("Qual o cpf?\n");
+    scanf("%i", &funcionario.cpf);
+
+    char senhaFuncionario[20], senhaFuncionarioComp[20];
+    int retornoSenhaFuncionario;
+    do{
+        getchar();
+        printf("Digite uma senha com 8 digitos: ");
+        gets(senhaFuncionario);
+        printf("Confirme a senha: ");
+        gets(senhaFuncionarioComp);
+
+        retornoSenhaFuncionario = strcmp(senhaFuncionario, senhaFuncionarioComp);
+        if(retornoSenhaFuncionario != 0){
+            printf("Senhas digitas são diferentes! Digite novamente!\n");
+        }
+    }while(retornoSenhaFuncionario != 0);
+    strcpy(funcionario.senha, senhaFuncionario);
+
+    if(cadastrarFuncionario(funcionario,incremento, repositorioFuncionario) == 1) {
+        printf("Funcionário cadastrado com sucesso");
+    } else {
+        printf("Algum erro aconteceu, tente novamente");
+    }
+}
+
 int main(int argc, char *argv[]) {
 	int op;
 	static int incremento = 0;
@@ -33,7 +119,7 @@ int main(int argc, char *argv[]) {
 	Produto repositorioProduto[1000];
 	Funcionario repositorioFuncionario[1000];
 	lerCliente(repositorioCliente, 2);
-	
+
 	do{
         Cliente c;
 		char senhaAdmin[5];
@@ -45,6 +131,7 @@ int main(int argc, char *argv[]) {
 		int retornoSenhaCliente;
 		int retornoCadastroCliente;
 		int retornoValidacao;
+		int countErros;
 		//int incremento = 1;
         printarMenuPrincipal();
         scanf("%i", &op);
@@ -54,7 +141,7 @@ int main(int argc, char *argv[]) {
 				printarMenuCliente();
 				int opCliente;
 				scanf("%i", &opCliente);
-                int retornoCliente, countErros;
+                ClientResponse clienteLogado;
 				switch(opCliente) {
                     case 1: //Login
                         countErros = 0;
@@ -66,60 +153,27 @@ int main(int argc, char *argv[]) {
 							printf("Digite sua senha: ");
 							gets(senha);
 
-							retornoCliente = loginCliente(cpf, senha, repositorioCliente);
+							clienteLogado = loginCliente(cpf, senha, repositorioCliente);
 							//printf("%i", retornoCliente);
-							if(retornoCliente != 1){
+							if(clienteLogado.error != 1){
 								printf("\nSenha Incorreta, digite novamente!\n");
 								countErros++;
 								getchar();
 							}
-						}while(retornoCliente != 1 && countErros <= 3);
+						}while(clienteLogado.error != 1 && countErros <= 3);
 						system("cls");
-						if (retornoCliente == 1) {
-							printf("LOGADO COM SUCESSO!");
+						if (clienteLogado.error == 1) {
+							printf("Bem vindo %s\n" ,clienteLogado.cliente.nome);
 							system("pause");
 						}
-						
+
                     break;
 
                     case 2: //Cadastro
-                    	getchar();
-                    	system("cls");
-                        printf("Digite seu nome: ");
-                        gets(c.nome);
-                        printf("Digite sua idade: ");
-                        scanf("%i", &c.idade);
-                        getchar();
-                        printf("Digite seu e-mail: ");
-                        gets(c.email);
-                        printf("Digite seu CPF (somente números): ");
-                        gets(c.cpf);
-                        printf("Digite seu endereço: ");
-                        gets(c.endereco);
-                        do{
-                        	printf("Digite uma senha com 8 digitos: ");
-                        	gets(senhaCliente);
-                        	printf("Confirme a senha: ");
-                        	gets(senhaClienteComp);
-                        	
-                        	retornoSenhaCliente = strcmp(senhaCliente, senhaClienteComp);
-                        	if(retornoSenhaCliente != 0){
-                        		printf("Senhas digitas são diferentes! Digite novamente!\n");
-							}
-						}while(retornoSenhaCliente != 0);
-						strcpy(c.senha, senhaCliente);
-						retornoCadastroCliente = cadastrarCliente(c, repositorioCliente, incremento);
-						
-						if(retornoCadastroCliente == 1){
-							incremento++;
-							system("cls");
-							printf("Cadastrado com sucesso!\n");
-							//printf("%i", incremento);
-							system("pause");
-						}
-						
+                    	criarCliente(incremento, &repositorioCliente);
                     break;
-					case 3: break; //Voltar
+					case 3:
+					break; //Voltar
                     default:
                     break;
 				}
@@ -130,9 +184,9 @@ int main(int argc, char *argv[]) {
                 getchar();
 				system("cls");
 				printf("LOGIN");
-				int retornoFuncionario;
 				char cpfFuncionario [11];
 				char senhaFuncionario[8];
+				FuncionarioResponse retornoFuncionario;
 				do{
 					getchar();
 					printf("\nDigite seu CPF (somente números): ");
@@ -140,17 +194,19 @@ int main(int argc, char *argv[]) {
 					printf("Digite sua senha: ");
 					gets(senhaFuncionario);
 					retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
-					if(retornoFuncionario != 1){
+					if(retornoFuncionario.error != 1){
 						printf("CPF ou senha incorretos, digite novamente!");
 					}
-				}while(retornoFuncionario != 1);
+				}while(retornoFuncionario.error != 1);
 				system("cls");
-				printf("LOGADO COM SUCESSO!");
+				printf("Bem vindo %s\n", retornoFuncionario.funcionario.nome);
 				break;
 
 			case 3:
 				getchar();
 				system("cls");
+				countErros = 0;
+				char idAdmin[10], senhaAdmin[10];
 				do{
 					printf("Digite o id do Administrador: ");
 					gets(idAdmin);
@@ -159,16 +215,32 @@ int main(int argc, char *argv[]) {
 					retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
 
 					if(retornoValidacao != 1){
-						printf("ID ou senha inválidos, digite novamente: ");
-						printf("\nDigite o ID do Administrador: ");
-						gets(idAdmin);
-						printf("Digite a senha do Administrador: ");
-						gets(senhaAdmin);
-						retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
+						printf("ID ou senha inválidos, tente novamente \n");
 					}
-				}while(retornoValidacao != 1);
+					countErros++;
+				}while(retornoValidacao != 1 && countErros <=3);
 				system("cls");
-				printf("LOGADO COM SUCESSO");
+
+				if(retornoValidacao == 1) { // se logado
+					int opAdmin;
+					do {
+
+						printarMenuAdmin();
+						scanf("%i", &opAdmin);
+						switch(opAdmin) {
+							case 1://Adicionar Funcionário
+							    criarFuncionario(incremento, repositorioFuncionario);
+								break;
+							case 2: //Adicionar produto
+							    system("cls");
+								break;
+							case 3: //Logout
+								break;
+							default:
+								break;
+						}
+					}while(opAdmin != 3);
+				}
 			break;
 
             default:
@@ -176,5 +248,5 @@ int main(int argc, char *argv[]) {
             break;
         }
 	}while(op != 4);
-	
+
 }
