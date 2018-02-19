@@ -27,12 +27,12 @@ void printarMenuCliente() {
 
 int main(int argc, char *argv[]) {
 	int op;
-	int incremento = 1;
+	static int incremento = 0;
 	setlocale(LC_ALL, "Portuguese");
 	Cliente repositorioCliente[1000];
 	Produto repositorioProduto[1000];
 	Funcionario repositorioFuncionario[1000];
-	lerCliente(repositorioCliente, incremento);
+	lerCliente(repositorioCliente, 2);
 	
 	do{
         Cliente c;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
         scanf("%i", &op);
 
         switch(op){
-           case 1:
+           case 1://Cliente
 				printarMenuCliente();
 				int opCliente;
 				scanf("%i", &opCliente);
@@ -58,9 +58,9 @@ int main(int argc, char *argv[]) {
 				switch(opCliente) {
                     case 1: //Login
                         countErros = 0;
+                        getchar();
 						do{
                             system("cls");
-							getchar();
 							printf("Digite seu CPF (somente números): ");
 							gets(cpf);
 							printf("Digite sua senha: ");
@@ -114,12 +114,12 @@ int main(int argc, char *argv[]) {
 							incremento++;
 							system("cls");
 							printf("Cadastrado com sucesso!\n");
-							//printf("%s", repositorioCliente[1].cpf);
+							//printf("%i", incremento);
 							system("pause");
 						}
 						
                     break;
-
+					case 3: break; //Voltar
                     default:
                     break;
 				}
@@ -176,4 +176,5 @@ int main(int argc, char *argv[]) {
             break;
         }
 	}while(op != 4);
+	
 }
