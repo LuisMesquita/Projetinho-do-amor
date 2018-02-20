@@ -360,4 +360,5 @@ int main(int argc, char *argv[]) {
             break;
         }
 	}while(op != 4);
+	salvarSistema(&sistema, 1);
 }

@@ -158,7 +158,7 @@ int adicionarItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
 }
 int alterarCadastroProduto(char codigo[10], Produto pa, Produto *repositorioProduto){
 	ProductResponse response;
-	response = procurarProduto(codigo[10], repositorioProduto);
+	response = procurarProduto(codigo, repositorioProduto);
 	if(response.error == 0){
 		if(strcmp(response.produto.codigo, codigo) == 0){
 			int indice;
