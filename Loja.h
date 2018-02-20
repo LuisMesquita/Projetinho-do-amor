@@ -18,20 +18,41 @@ void printarMenuLojaPrincipal() {
     printf("\n3 - Logout\n");
 }
 
-void printarProdutos(Produto listaDeProdutos[], int qntItems) {
+void printarTodosProdutos(Produto listaDeProdutos[], int qntItems) {
+	system("cls");
 	int i;
 	for(i = 0; i<qntItems; i++) {
-		printf("+-----+--------+--------+-----+\n");
-		printf("|nome: %s \n\n",listaDeProdutos[i].nome);
-		printf("|descrição: %s \n",listaDeProdutos[i].descricao);
-		printf("|R$%f \n",listaDeProdutos[i].valor);
-		printf("|código: %s \n",listaDeProdutos[i].codigo);
-		printf("+-----+--------+--------+-----+\n\n");
+		printarProduto(listaDeProdutos[i]);
 	}
 }
 
+void printarProduto(Produto produto) {
+	printf("+-----+--------+--------+-----+\n");
+	printf("|nome: %s \n\n",produto.nome);
+	printf("|descrição: %s \n",produto.descricao);
+	printf("|R$%f \n",produto.valor);
+	printf("|código: %s \n",produto.codigo);
+	printf("+-----+--------+--------+-----+\n\n");
+}
+
+void printarCarrinho(Produto listaDeProdutos[], int qntItems) {
+	system("cls");
+	int i;
+	float total;
+	for(i = 0; i<qntItems; i++) {
+		printarProduto(listaDeProdutos[i]);
+		total+= listaDeProdutos[i].valor;
+	}
+	
+	printf("+-----+--------+--------+-----+\n");
+	printf("| Valor Total - R$%f \n",total);
+	printf("+-----+--------+--------+-----+\n\n");
+	system("pause");
+}
+
 void printarProdutoMenu(){
-	printf("Digite o código do produto que deseja colocar no carrinho ou exit para sair.");
+	printf("Digite o código do produto que deseja colocar no carrinho\n");
+	printf("Ou digite 'exit' para sair \n");
 }
 
 void iniciarLoja(Produto* repositorioProduto, int qntItems) {
@@ -39,7 +60,7 @@ void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 	getchar();
 	Produto carrinho[20];
 	char codigo[10], carrinhoOp[20];
-	int lojaOp, qntCarrinho = 0;
+	int lojaOp, i, qntCarrinho = 0;
 	ProductResponse produtoResponse;
 	do {
 		printarMenuLojaPrincipal();
@@ -47,36 +68,31 @@ void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 		
 		switch(lojaOp){
 			case 1: //listar todos os itens da loja
-					int i;
-					for(i = 0; i<qntItems; i++) {
-						printf("+-----+--------+--------+-----+\n");
-						printf("|nome: %s \n\n",repositorioProduto[i].nome);
-						printf("|descrição: %s \n",repositorioProduto[i].descricao);
-						printf("|R$%f \n",repositorioProduto[i].valor);
-						printf("|código: %s \n",repositorioProduto[i].codigo);
-						printf("+-----+--------+--------+-----+\n\n");
-					}
-				system("pause");
+				printarTodosProdutos(repositorioProduto, qntItems);
 				do {
 					printarProdutoMenu();
-					getchar();
 					gets(carrinhoOp);
 					produtoResponse = procurarProduto(carrinhoOp, repositorioProduto);
 					
-					if (produtoResponse.error == 0 && strcmp(carrinhoOp, "exit") != 0)){
-						carrinho[qntCarrinho] = produtoResponse.produto;
-						qntCarrinho++;
-						printf("\nProduto adicionar no carrinho com sucesso.");
-					} else {
-						printf("\nProduto não encontrado, por favor tente novamente.");
+					if (strcmp(carrinhoOp, "exit") != 0) {
+						if (produtoResponse.error == 0){
+							carrinho[qntCarrinho] = produtoResponse.produto;
+							qntCarrinho++;
+							printf("\nProduto adicionar no carrinho com sucesso.\n");
+						} else {
+							printf("\nProduto não encontrado, por favor tente novamente\n");
+						}
 					}
 					
 				}while(strcmp(carrinhoOp, "exit") != 0);
 				system("pause");
 				break;
 			case 2:
-				printarProdutos(carrinho, qntCarrinho);
-				
+				printarCarrinho(carrinho, qntCarrinho);
+				system("pause");
+				do {
+					
+				}while(1<3);
 				break;
 			case 3:
 				break;
