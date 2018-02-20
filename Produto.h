@@ -32,7 +32,6 @@ int cadastrarProduto(Produto p, int incremento, Produto *repositorioProduto){
 	response.produto = p;
 	response.produto.status = 1;
 	repositorioProduto[incremento] = response.produto;
-	
 	response.error = 1; // Cadastrado com sucesso;
 	
 	return response.error;
