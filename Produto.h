@@ -51,6 +51,7 @@ int getIndiceProduto(char codigo[10], Produto *repositorioProduto){ // RETORNA O
 			indice++;
 		}
 	}
+	return -1;
 }
 int getIndiceCategoria(char categoria[20], Produto *repositorioProduto){ // RETORNA O INDICE DO PRODUTO COM A CATEGORIA PESQUISADA.
 	int indice;
