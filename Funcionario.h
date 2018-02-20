@@ -67,6 +67,7 @@ int cadastrarFuncionario(Funcionario f, int incremento, Funcionario *repositorio
     repositorioFuncionario[incremento] = response.funcionario;
 
     response.error = 1; // Funcionario Cadastrado com sucesso;
+
     return response.error;
 }
 int removerFuncionario(char cpf[11], Funcionario *repositorioFuncionario){
@@ -103,9 +104,8 @@ FuncionarioResponse procurarFuncionario(char cpf[11], Funcionario *repositorioFu
 	return response;
 }
 FuncionarioResponse loginFuncionario(char cpf[11], char senha[8], Funcionario *repositorioFuncionario){
-	FuncionarioResponse response;
+    FuncionarioResponse response;
     int indice;
-    printf("Repositorio cpf -- %s , senha -- %s\n", repositorioFuncionario[0].cpf, repositorioFuncionario[0].senha);
     indice = getIndiceCpf(cpf, repositorioFuncionario);
     if(strcmp(senha, repositorioFuncionario[indice].senha) == 0){
         response.error = 1;

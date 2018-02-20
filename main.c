@@ -6,8 +6,8 @@
 #include "Cliente.h"
 #include "Funcionario.h"
 #include "Produto.h"
+#include "LojaGeek.h"
 #include "Sistema.h"
-#include "Loja.h"
 
 FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	getchar();
@@ -27,11 +27,8 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
 		if(retornoFuncionario.error != 1){
 			printf("CPF ou senha incorretos, digite novamente!");
-		} else {
-			return retornoFuncionario;
 		}
 		contErros++;
-		system("pause");
 	}while(retornoFuncionario.error != 1 && contErros <=3 );
 	return retornoFuncionario;
 }
@@ -41,22 +38,22 @@ void alterarProduto(Produto *repositorioProduto){
     char codigo[10];
     getchar();
     system("cls");
-    printf("Digite o código do produto a ser alterado: \n");
+    printf("Digite o código do produto a ser alterado: ");
     gets(codigo);
 
-    printf("Digite o nome do produto\n");
+    printf("Digite o nome do produto");
     gets(pa.nome);
-    printf("Digite o valor do produto\n");
+    printf("Digite o valor do produto");
     scanf("%f", &pa.valor);
-    printf("Digite a descrição do produto\n");
+    printf("Digite a descrição do produto");
     gets(pa.descricao);
-    printf("Digite a categoria do produto\n");
+    printf("Digite a categoria do produto");
     gets(pa.categoria);
-    printf("Digite o tamanho do produto\n");
+    printf("Digite o tamanho do produto");
     gets(pa.tamanho);
-    printf("Digite o codigo do produto\n");
+    printf("Digite o codigo do produto");
     gets(pa.codigo);
-    printf("Digite a quantidade que deseja adicionar\n");
+    printf("Digite a quantidade que deseja adicionar");
     scanf("%i", &pa.qtd_Itens);
     alterarCadastroProduto(codigo, pa, repositorioProduto);
 }
@@ -65,7 +62,7 @@ void removerProdutoMain(Produto *repositorioProduto){
 	char codigoProduto[10];
     getchar();
     system("cls");
-    printf("digite o codigo do produto que deseja remover\n");
+    printf("digite o codigo do produto que deseja remover");
     gets(codigoProduto);
     removerProduto(codigoProduto, repositorioProduto);
 }
@@ -74,20 +71,19 @@ void criarProduto(int incrementoProduto, Produto *repositorioProduto){
 	Produto p;
     getchar();
     system("cls");
-    printf("Digite o nome do produto\n");
+    printf("Digite o nome do produto");
     gets(p.nome);
-    printf("Digite o valor do produto\n");
+    printf("Digite o valor do produto");
     scanf("%f", &p.valor);
-    getchar();
-    printf("Digite a descrição do produto\n");
+    printf("Digite a descrição do produto");
     gets(p.descricao);
-    printf("Digite a categoria do produto\n");
+    printf("Digite a categoria do produto");
     gets(p.categoria);
-    printf("Digite o tamanho do produto\n");
+    printf("Digite o tamanho do produto");
     gets(p.tamanho);
-    printf("Digite o codigo do produto\n");
+    printf("Digite o codigo do produto");
     gets(p.codigo);
-    printf("Digite a quantidade que deseja adicionar\n");
+    printf("Digite a quantidade que deseja adicionar");
     scanf("%i", &p.qtd_Itens);
     cadastrarProduto(p, incrementoProduto, repositorioProduto);
 }
@@ -119,13 +115,13 @@ void printarMenuAdmin() {
 }
 
 void PrintarMenuFuncinario(){
-	system("cls");
-	printf("TELA DE FUNCIONARIO");
-	printf("\nSELECIONE UMA OPÇÃO");
-	printf("\n1 - Cadastrar produto");
-	printf("\n2 - Remover produto");
-	printf("\n3 - Alterar produto");
-	printf("\n4 - Voltar \n");
+system("csl");
+printf("TELA DE FUNCIONARIO");
+printf("\nSELECIONE UMA OPÇÃO");
+printf("\n1 - Cadastrar produto");
+printf("\n2 - Remover produto");
+printf("\n3 - Alterar produto");
+printf("\n4 - Voltar");
 }
 
 void criarCliente(int incrementoCliente, Cliente *repositorioCliente) {
@@ -204,7 +200,6 @@ void criarFuncionario(int incrementoFuncionario, Funcionario *repositorioFuncion
     } else {
         printf("Algum erro aconteceu, tente novamente");
     }
-    system("pause");
 }
 
 int main(int argc, char *argv[]) {
@@ -266,62 +261,57 @@ int main(int argc, char *argv[]) {
 						system("cls");
 						if (clienteLogado.error == 1) {
 							printf("Bem vindo %s\n" ,clienteLogado.cliente.nome);
+							system("pause");
 						}
-						iniciarLoja(&repositorioProduto, incrementoProduto);
 
                     break;
 
                     case 2: //Cadastro
                     	criarCliente(incrementoCliente, &repositorioCliente);
-                    	incrementoCliente++;
-                    	break;
+                    break;
 					case 3:
-						break; //Voltar
+					break; //Voltar
                     default:
-                    	break;
+                    break;
 				}
 
             break;
 
             case 2:
-                funcionarioLogado = loginFuncionarioMain(&repositorioFuncionario);
+
                 
-                if(funcionarioLogado.error == 0){
+                funcionarioLogado = loginFuncionarioMain(&sistema);
+                
+                if(funcionarioLogado.error == 1){
                 	printf("Funcionário não encontrado");
-                	system("pause");
                 	break;
 				}
 				
 				system("cls");
 				printf("Bem vindo %s\n", funcionarioLogado.funcionario.nome);
-                Produto p;
-                do{
-  					PrintarMenuFuncinario();
-					scanf("%i", &opFuncionario);
+				PrintarMenuFuncinario();
+				scanf("%i", &opFuncionario);
 
-					switch (opFuncionario)
-					{
-	                    case 1:
-	                        criarProduto(incrementoProduto, &repositorioProduto);  //adiciona um produto novo
-	                        incrementoProduto++;
-	                        break;
-	
-	                    case 2:
-	                        removerProdutoMain(repositorioProduto); //remove um produto existente
-	                    	break;
-	
-	                    case 3:
-	                        alterarProduto(repositorioProduto); //altera as caracteristicas de um produto
-	                    	break;
-	
-	                    case 4:
-	                        break;
-	                    
-	                    default:
-	                    	break;
-	
-					}
-				} while(opFuncionario != 4);
+                Produto p;
+				switch (opFuncionario)
+				{
+                    case 1:
+                        criarProduto(incrementoProduto, repositorioProduto);  //adiciona um produto novo
+                        break;
+
+                    case 2:
+                        removerProdutoMain(repositorioProduto); //remove um produto existente
+                    break;
+
+                    case 3:
+                        alterarProduto(repositorioProduto); //altera as caracteristicas de um produto
+                    break;
+
+                    case 4:
+                        break;
+                    break;
+
+				}
 				break;
 
 			case 3:
@@ -352,7 +342,6 @@ int main(int argc, char *argv[]) {
 						switch(opAdmin) {
 							case 1://Adicionar Funcionário
 							    criarFuncionario(incrementoFuncionario, repositorioFuncionario);
-							    incrementoFuncionario++;
 								break;
 							case 2: //Adicionar produto
 							    system("cls");
