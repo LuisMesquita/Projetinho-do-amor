@@ -344,7 +344,7 @@ int main(int argc, char *argv[]) {
 							    criarFuncionario(incrementoFuncionario, repositorioFuncionario);
 								break;
 							case 2: //Adicionar produto
-							    system("cls");
+							     criarProduto(incrementoProduto, repositorioProduto);
 								break;
 							case 3: //Logout
 								break;

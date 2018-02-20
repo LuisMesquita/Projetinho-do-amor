@@ -17,6 +17,17 @@ void printarMenuLojaPrincipal() {
     printf("\n2 - Logout\n");
 }
 
+void printarProduto(Produto listaDeProdutos[], int qntItems) {
+	for(i = 0; i<qntItems; i++) {
+		printf("+-----+--------+--------+-----+\n");
+		printf("|nome: %s \n\n",listaDeProdutos[i].nome);
+		printf("|descrição: %s \n",listaDeProdutos[i].descricao);
+		printf("|R$%f \n",listaDeProdutos[i].valor);
+		printf("|código: %s \n",listaDeProdutos[i].codigo);
+		printf("+-----+--------+--------+-----+\n\n");
+	}
+}
+
 void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 	printf("Loja geek");
 	getchar();
@@ -27,14 +38,7 @@ void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 		
 		switch(lojaOp){
 			case 1: //listar todos os itens da loja
-				for(i = 0; i<qntItems; i++) {
-					printf("+-----+--------+--------+-----+\n");
-					printf("|nome: %s \n\n",repositorioProduto[i].nome);
-					printf("|descrição: %s \n",repositorioProduto[i].descricao);
-					printf("|R$%f \n",repositorioProduto[i].valor);
-					printf("|código: %s \n",repositorioProduto[i].codigo);
-					printf("+-----+--------+--------+-----+\n\n");
-				}
+				printarProduto(repositorioProduto, qntItems);
 				
 				printf("Digite o codigo do produto que você quer comprar\n");
 				system("pause");
