@@ -6,11 +6,40 @@
 #include "Cliente.h"
 #include "Funcionario.h"
 #include "Produto.h"
-#include "Loja.h"
+#include "LojaGeek.h"
 #include "Sistema.h"
+void esqueciSenha(Cliente *repositorioCliente){
+	getchar();
+	system("cls");
+	char cpf[11];
+	char email[30];
+	char novaSenha[8];
+	char senhaComp[8];
+	int retornoSenhaCliente;
+	
+	printf("Digite seu CPF: ");
+	gets(cpf);
+	printf("Digite seu e-mail: ");
+	gets(email);
+	do{
+        printf("Digite uma senha com 8 digitos: ");
+        gets(novaSenha);
+        printf("Confirme a senha: ");
+        gets(senhaComp);
 
+        retornoSenhaCliente = strcmp(novaSenha, senhaComp);
+        if(retornoSenhaCliente != 0){
+            printf("Senhas digitas são diferentes! Digite novamente!\n");
+        }
+    }while(retornoSenhaCliente != 0);
+    alterarSenhaCliente(cpf, email, novaSenha, repositorioCliente);
+    printf("Senha alterada com sucesso!");
+    system("pause");
+}
 FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	getchar();
+	int i, a = 0;
+	char c;
 	int contErros = 0;
 	system("cls");
 	printf("LOGIN");
@@ -19,13 +48,28 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	FuncionarioResponse retornoFuncionario;
 	retornoFuncionario.error= 0;
 	do{
-		getchar();
+		//getchar();
 		printf("\nDigite seu CPF (somente números): ");
 		gets(cpfFuncionario);
 		printf("Digite sua senha: ");
-		gets(senhaFuncionario);
+		for (i = 0; i < 8; i++)
+	   	do{
+	       c=getch();
+	       if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
+	       senhaFuncionario[a]=c;  //Se for, armazena o caractere 
+	       a++;
+	       printf("*");          //imprime o * Anterisco
+	       }
+	       else if(c==8&&a){     //8 é o caractere BackSpace na tabela ASCII, && a analisa se a é diferente de 0
+	       senhaFuncionario[a]='\0';
+	       a--;
+	       printf("\b \b");       //Apagando o caractere digitado
+	       } 
+	   	}while(c!=13); 
+        printf("\n");
+        senhaFuncionario[i] = '\0';
 		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
-		if(retornoFuncionario.error != 1){
+		if(retornoFuncionario.error == 0){
 			printf("CPF ou senha incorretos, digite novamente!");
 		}
 		contErros++;
@@ -33,58 +77,47 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	return retornoFuncionario;
 }
 
-void alterarProduto(Produto *repositorioProduto){
+void alterarProduto(char codigo[10], Produto *repositorioProduto){
     Produto pa;
-    char codigo[10];
     getchar();
     system("cls");
     printf("Digite o código do produto a ser alterado: ");
     gets(codigo);
 
-    printf("Digite o nome do produto");
+    printf("Digite o nome do produto: ");
     gets(pa.nome);
-    printf("Digite o valor do produto");
+    printf("Digite o valor do produto: ");
     scanf("%f", &pa.valor);
-    printf("Digite a descrição do produto");
+    printf("Digite a descrição do produto: ");
     gets(pa.descricao);
-    printf("Digite a categoria do produto");
+    printf("Digite a categoria do produto: ");
     gets(pa.categoria);
-    printf("Digite o tamanho do produto");
+    printf("Digite o tamanho do produto: ");
     gets(pa.tamanho);
-    printf("Digite o codigo do produto");
+    printf("Digite o codigo do produto: ");
     gets(pa.codigo);
-    printf("Digite a quantidade que deseja adicionar");
+    printf("Digite a quantidade que deseja adicionar: ");
     scanf("%i", &pa.qtd_Itens);
     alterarCadastroProduto(codigo, pa, repositorioProduto);
-}
-
-void removerProdutoMain(Produto *repositorioProduto){
-	char codigoProduto[10];
-    getchar();
-    system("cls");
-    printf("digite o codigo do produto que deseja remover");
-    gets(codigoProduto);
-    removerProduto(codigoProduto, repositorioProduto);
 }
 
 void criarProduto(int incrementoProduto, Produto *repositorioProduto){
 	Produto p;
     getchar();
     system("cls");
-    printf("Digite o nome do produto\n");
+    printf("Digite o nome do produto");
     gets(p.nome);
-    printf("Digite o valor do produto\n");
+    printf("Digite o valor do produto");
     scanf("%f", &p.valor);
-    getchar();
-    printf("Digite a descrição do produto\n");
+    printf("Digite a descrição do produto");
     gets(p.descricao);
-    printf("Digite a categoria do produto\n");
+    printf("Digite a categoria do produto");
     gets(p.categoria);
-    printf("Digite o tamanho do produto\n");
+    printf("Digite o tamanho do produto");
     gets(p.tamanho);
-    printf("Digite o codigo do produto\n");
+    printf("Digite o codigo do produto");
     gets(p.codigo);
-    printf("Digite a quantidade que deseja adicionar\n");
+    printf("Digite a quantidade que deseja adicionar");
     scanf("%i", &p.qtd_Itens);
     cadastrarProduto(p, incrementoProduto, repositorioProduto);
 }
@@ -104,6 +137,7 @@ void printarMenuCliente() {
     printf("SELECIONE UMA OPÇÃOO: ");
     printf("\n1 - Login");
     printf("\n2 - Cadastro");
+    printf("\n3 - Esqueci a senha");
     printf("\n3 - Voltar\n");
 }
 
@@ -112,7 +146,9 @@ void printarMenuAdmin() {
     printf("SELECIONE UMA OPÇÃOO: ");
     printf("\n1 - Adicionar Funcionário");
     printf("\n2 - Adicionar Produto");
-    printf("\n3 - Logout\n");
+    printf("\n3 - Remover Produto");
+    printf("\n4 - Alterar Produto");
+    printf("\n5 - Logout\n");
 }
 
 void PrintarMenuFuncinario(){
@@ -205,31 +241,46 @@ void criarFuncionario(int incrementoFuncionario, Funcionario *repositorioFuncion
 
 int main(int argc, char *argv[]) {
 	int op;
+	Cliente repositorioCliente[1000];
+	Funcionario repositorioFuncionario[1000];
+	Produto repositorioProduto[1000];
+	int incrementoCliente, incrementoFuncionario, incrementoProduto;
+	
 	Sistema sistema;
 	lerSistema(&sistema, 1);
-	int incrementoCliente, incrementoFuncionario, incrementoProduto;
 	incrementoCliente = sistema.incrementoCliente;
 	incrementoFuncionario = sistema.incrementoFuncionario;
 	incrementoProduto = sistema.incrementoProduto;
 	
-	Cliente repositorioCliente[1000];
-	Funcionario repositorioFuncionario[1000];
-	Produto repositorioProduto[1000];
+	lerCliente(repositorioCliente, incrementoCliente);
+	lerFuncionario(repositorioFuncionario, incrementoFuncionario);
+	lerProduto(repositorioProduto, incrementoProduto);
+	
+	system("color f1");
 	setlocale(LC_ALL, "Portuguese");
 	do{
-        Cliente c;
+        Cliente c1;
+        char c;
+        int a = 0;
 		char senhaAdmin[5];
 		char idAdmin[5];
 		char senhaCliente[8];
 		char senhaClienteComp[8];
 		char cpf[11];
 		char senha[8];
+		char codigoProdutoAdmim[10];
+		char codigoProdutoFuncionario[10];
 		int retornoSenhaCliente;
 		int retornoCadastroCliente;
 		int retornoValidacao;
 		int countErros;
+		int indiceRemocaoProdutoAdmin;
+		int opRemoverProdutoAdmin;
+		int indiceRemocaoProdutoFuncionario;
+		int opRemoverProdutoFuncionario;
 		FuncionarioResponse funcionarioLogado;
 		int opFuncionario;
+		int i;
 		//int incremento = 1;
         printarMenuPrincipal();
         scanf("%i", &op);
@@ -249,7 +300,20 @@ int main(int argc, char *argv[]) {
 							printf("Digite seu CPF (somente números): ");
 							gets(cpf);
 							printf("Digite sua senha: ");
-							gets(senha);
+							
+							do{
+					           c=getch();
+					           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
+					           senha[a]=c;  		 //Se for, armazena o caractere 
+					           a++;
+					           printf("*");          //imprime o * Anterisco
+					           }
+					           else if(c==8&&a){     //8 é o caractere BackSpace na tabela ASCII, && a analisa se a é diferente de 0
+					           senha[a]='\0';
+					           a--;
+					           printf("\b \b");       //Apagando o caractere digitado
+					           } 
+					       }while(c!=13); 
 
 							clienteLogado = loginCliente(cpf, senha, repositorioCliente);
 							//printf("%i", retornoCliente);
@@ -263,7 +327,6 @@ int main(int argc, char *argv[]) {
 						if (clienteLogado.error == 1) {
 							printf("Bem vindo %s\n" ,clienteLogado.cliente.nome);
 							system("pause");
-							iniciarLoja(repositorioProduto, incrementoProduto);
 						}
 
                     break;
@@ -271,7 +334,10 @@ int main(int argc, char *argv[]) {
                     case 2: //Cadastro
                     	criarCliente(incrementoCliente, repositorioCliente);
                     break;
-					case 3:
+                    case 3:
+                    	esqueciSenha(repositorioCliente);
+						break; 
+					case 4:
 					break; //Voltar
                     default:
                     break;
@@ -279,10 +345,10 @@ int main(int argc, char *argv[]) {
 
             break;
 
-            case 2:
+            case 2://Funcionário
                 funcionarioLogado = loginFuncionarioMain(repositorioFuncionario);
                 
-                if(funcionarioLogado.error == 1){
+                if(funcionarioLogado.error == 0){
                 	printf("Funcionário não encontrado");
                 	break;
 				}
@@ -297,15 +363,33 @@ int main(int argc, char *argv[]) {
 				{
                     case 1:
                         criarProduto(incrementoProduto, repositorioProduto);  //adiciona um produto novo
-                        incrementoProduto++;
                         break;
 
                     case 2:
-                        removerProdutoMain(repositorioProduto); //remove um produto existente
+                       	getchar();
+						printf("REMOVER PRODUTO\n");
+						printf("Digite o código do produto: ");
+						gets(codigoProdutoFuncionario);
+						indiceRemocaoProdutoFuncionario = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
+						if(indiceRemocaoProdutoFuncionario > 0){
+							printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoFuncionario].nome);
+							printf("\n1 - Remover");
+							printf("\n2 - Cancelar");
+							switch(opRemoverProdutoFuncionario){
+								case 1:
+									removerProduto(codigoProdutoFuncionario, repositorioProduto);
+									printf("Produto Removido com sucesso!");
+								break;
+								case 2: break;	
+							}
+						}
+						else{
+							printf("Produto inexistente!");
+						}
                     break;
 
                     case 3:
-                        alterarProduto(repositorioProduto); //altera as caracteristicas de um produto
+                        break;
                     break;
 
                     case 4:
@@ -315,7 +399,7 @@ int main(int argc, char *argv[]) {
 				}
 				break;
 
-			case 3:
+			case 3://Administrador
 				getchar();
 				system("cls");
 				countErros = 0;
@@ -324,11 +408,25 @@ int main(int argc, char *argv[]) {
 					printf("Digite o id do Administrador: ");
 					gets(idAdmin);
 					printf("Digite a senha do Administrador: ");
-					gets(senhaAdmin);
+					do{
+			           c=getch();
+			           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
+			           senhaAdmin[a]=c;  //Se for, armazena o caractere 
+			           a++;
+			           printf("*");          //imprime o * Anterisco
+			           }
+			           else if(c==8&&a){     //8 é o caractere BackSpace na tabela ASCII, && a analisa se a é diferente de 0
+			           senhaAdmin[a]='\0';
+			           a--;
+			           printf("\b \b");       //Apagando o caractere digitado
+			           } 
+			        }while(c!=13); 
+                    senhaAdmin[i] = '\0';
 					retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
 
 					if(retornoValidacao != 1){
 						printf("ID ou senha inválidos, tente novamente \n");
+						printf("Tentativas: %i", countErros);
 					}
 					countErros++;
 				}while(retornoValidacao != 1 && countErros <=3);
@@ -337,7 +435,6 @@ int main(int argc, char *argv[]) {
 				if(retornoValidacao == 1) { // se logado
 					int opAdmin;
 					do {
-
 						printarMenuAdmin();
 						scanf("%i", &opAdmin);
 						switch(opAdmin) {
@@ -346,21 +443,48 @@ int main(int argc, char *argv[]) {
 								break;
 							case 2: //Adicionar produto
 							    criarProduto(incrementoProduto, repositorioProduto);
-							    incrementoProduto++;
 								break;
-							case 3: //Logout
+							case 3: //Remover produto
+								getchar();
+								printf("REMOVER PRODUTO\n");
+								printf("Digite o código do produto: ");
+								gets(codigoProdutoAdmim);
+								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
+								if(indiceRemocaoProdutoAdmin > 0){
+									printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
+									printf("\n1 - Remover");
+									printf("\n2 - Cancelar");
+									switch(opRemoverProdutoAdmin){
+										case 1:
+											removerProduto(codigoProdutoAdmim, repositorioProduto);
+											printf("Produto Removido com sucesso!");
+										break;
+										case 2: break;	
+									}
+								}
+								else{
+									printf("Produto inexistente!");
+								}
+								
+								break;
+							case 4: //Alterar produto
+								alterarProduto(codigoProdutoAdmim, repositorioProduto);
+							case 5:
 								break;
 							default:
 								break;
 						}
-					}while(opAdmin != 3);
+					}while(opAdmin != 5);
 				}
 			break;
 
             default:
                 printf("Obrigado pela visita");
+                salvarSistema(&sistema, 1);
+				salvarCliente(repositorioCliente, incrementoCliente);
+				salvarFuncionario(repositorioFuncionario, incrementoFuncionario);
+				salvarProduto(repositorioProduto, incrementoProduto);
             break;
         }
 	}while(op != 4);
-	salvarSistema(&sistema, 1);
 }
