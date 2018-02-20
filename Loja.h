@@ -55,12 +55,20 @@ void printarProdutoMenu(){
 	printf("Ou digite 'exit' para sair \n");
 }
 
+void printarMenuLojaPrincipal() {
+	system("cls");
+    printf("SELECIONE UMA OPÇÃOO: ");
+    printf("\n1 - Comprar todos os items");
+    printf("\n2 - Remover Item");
+    printf("\n3 - Voltar\n");
+}
+
 void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 	printf("Loja geek");
 	getchar();
 	Produto carrinho[20];
-	char codigo[10], carrinhoOp[20];
-	int lojaOp, i, qntCarrinho = 0;
+	char codigo[10], listaOp[20];
+	int lojaOp, i, qntCarrinho = 0, carrinhoOp;
 	ProductResponse produtoResponse;
 	do {
 		printarMenuLojaPrincipal();
@@ -71,10 +79,10 @@ void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 				printarTodosProdutos(repositorioProduto, qntItems);
 				do {
 					printarProdutoMenu();
-					gets(carrinhoOp);
-					produtoResponse = procurarProduto(carrinhoOp, repositorioProduto);
+					gets(listaOp);
+					produtoResponse = procurarProduto(listaOp, repositorioProduto);
 					
-					if (strcmp(carrinhoOp, "exit") != 0) {
+					if (strcmp(listaOp, "exit") != 0) {
 						if (produtoResponse.error == 0){
 							carrinho[qntCarrinho] = produtoResponse.produto;
 							qntCarrinho++;
@@ -84,15 +92,27 @@ void iniciarLoja(Produto* repositorioProduto, int qntItems) {
 						}
 					}
 					
-				}while(strcmp(carrinhoOp, "exit") != 0);
+				}while(strcmp(listaOp, "exit") != 0);
 				system("pause");
 				break;
 			case 2:
 				printarCarrinho(carrinho, qntCarrinho);
-				system("pause");
-				do {
+				do{
+					printarMenuCarrinho();
+					scanf("%i",&carrinhoOp);
 					
-				}while(1<3);
+					switch(carrinhoOp) {
+						case 1:
+							break;
+						case 2:
+							break;
+						case 3:
+							break;
+						default:
+							break;
+					}
+				} while(carrinhoOp != 3);
+				system("pause");
 				break;
 			case 3:
 				break;
