@@ -248,6 +248,7 @@ int main(int argc, char *argv[]) {
 	
 	Sistema sistema;
 	lerSistema(&sistema, 1);
+	//printf("%i", sistema.incrementoCliente);
 	incrementoCliente = sistema.incrementoCliente;
 	incrementoFuncionario = sistema.incrementoFuncionario;
 	incrementoProduto = sistema.incrementoProduto;
@@ -297,8 +298,10 @@ int main(int argc, char *argv[]) {
                         getchar();
 						do{
                             system("cls");
+                            fflush(stdin);
 							printf("Digite seu CPF (somente números): ");
 							gets(cpf);
+							fflush(stdin);
 							printf("Digite sua senha: ");
 							
 							do{
@@ -316,7 +319,7 @@ int main(int argc, char *argv[]) {
 					       }while(c!=13); 
 
 							clienteLogado = loginCliente(cpf, senha, repositorioCliente);
-							//printf("%i", retornoCliente);
+							
 							if(clienteLogado.error != 1){
 								printf("\nSenha Incorreta, digite novamente!\n");
 								countErros++;

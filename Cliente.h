@@ -121,6 +121,8 @@ ClientResponse loginCliente(char cpf[11], char senha[8], Cliente *repositorioCli
     int indice;
     indice = getIndice(cpf, repositorioCliente);
     //printf("\nIndice Login %i", indice);
+    //printf("\n%s" repositorioCliente[indice].nome);
+    //system("pause");
 	if(indice >= 0){
     	if(strcmp(senha, repositorioCliente[indice].senha) == 0 && repositorioCliente[indice].status == 1){
         	response.cliente =  repositorioCliente[indice];

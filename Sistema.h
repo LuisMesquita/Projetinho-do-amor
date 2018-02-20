@@ -19,19 +19,19 @@ void lerSistema(Sistema* sistema, int quantidade);
 
 void salvarSistema(Sistema* sistema, int quantidade){
 	FILE *arq;
-	arq = fopen("Sistema.txt", "wb");
+	arq = fopen("Sistema.txt", "w");
 	fwrite(sistema, sizeof(Sistema), quantidade, arq);
 	fclose(arq);
 }
 void lerSistema(Sistema* sistema, int quantidade){
 	FILE *arq;
-	if(fopen("Sistema.txt", "rb") == NULL){
+	if(fopen("Sistema.txt", "r") == NULL){
 		sistema->incrementoCliente = 0;
 		sistema->incrementoFuncionario = 0;
 		sistema->incrementoProduto = 0;
 	}
 	else{
-		arq = fopen("Sistema.txt", "rb");
+		arq = fopen("Sistema.txt", "r");
 	}
 	fread(sistema, sizeof(Sistema), quantidade, arq);
 	fclose(arq);
