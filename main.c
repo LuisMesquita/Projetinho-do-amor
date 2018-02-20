@@ -11,6 +11,8 @@
 
 FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	getchar();
+	int i, a = 0;
+	char c;
 	int contErros = 0;
 	system("cls");
 	printf("LOGIN");
@@ -22,10 +24,23 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 		//getchar();
 		printf("\nDigite seu CPF (somente números): ");
 		gets(cpfFuncionario);
-		fflush(stdin);
 		printf("Digite sua senha: ");
-		gets(senhaFuncionario);
-		fflush(stdin);
+		for (i = 0; i < 8; i++)
+	   	do{
+	       c=getch();
+	       if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
+	       senhaFuncionario[a]=c;  //Se for, armazena o caractere 
+	       a++;
+	       printf("*");          //imprime o * Anterisco
+	       }
+	       else if(c==8&&a){     //8 é o caractere BackSpace na tabela ASCII, && a analisa se a é diferente de 0
+	       senhaFuncionario[a]='\0';
+	       a--;
+	       printf("\b \b");       //Apagando o caractere digitado
+	       } 
+	   	}while(c!=13); 
+        printf("\n");
+        senhaFuncionario[i] = '\0';
 		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
 		if(retornoFuncionario.error == 0){
 			printf("CPF ou senha incorretos, digite novamente!");
@@ -198,19 +213,27 @@ void criarFuncionario(int incrementoFuncionario, Funcionario *repositorioFuncion
 
 int main(int argc, char *argv[]) {
 	int op;
+	Cliente repositorioCliente[1000];
+	Funcionario repositorioFuncionario[1000];
+	Produto repositorioProduto[1000];
+	int incrementoCliente, incrementoFuncionario, incrementoProduto;
+	
 	Sistema sistema;
 	lerSistema(&sistema, 1);
-	int incrementoCliente, incrementoFuncionario, incrementoProduto;
 	incrementoCliente = sistema.incrementoCliente;
 	incrementoFuncionario = sistema.incrementoFuncionario;
 	incrementoProduto = sistema.incrementoProduto;
 	
-	Cliente repositorioCliente[1000];
-	Funcionario repositorioFuncionario[1000];
-	Produto repositorioProduto[1000];
+	lerCliente(repositorioCliente, incrementoCliente);
+	lerFuncionario(repositorioFuncionario, incrementoFuncionario);
+	lerProduto(repositorioProduto, incrementoProduto);
+	
+	system("color f1");
 	setlocale(LC_ALL, "Portuguese");
 	do{
-        Cliente c;
+        Cliente c1;
+        char c;
+        int a = 0;
 		char senhaAdmin[5];
 		char idAdmin[5];
 		char senhaCliente[8];
@@ -229,6 +252,7 @@ int main(int argc, char *argv[]) {
 		int opRemoverProdutoFuncionario;
 		FuncionarioResponse funcionarioLogado;
 		int opFuncionario;
+		int i;
 		//int incremento = 1;
         printarMenuPrincipal();
         scanf("%i", &op);
@@ -248,7 +272,20 @@ int main(int argc, char *argv[]) {
 							printf("Digite seu CPF (somente números): ");
 							gets(cpf);
 							printf("Digite sua senha: ");
-							gets(senha);
+							
+							do{
+					           c=getch();
+					           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
+					           senha[a]=c;  		 //Se for, armazena o caractere 
+					           a++;
+					           printf("*");          //imprime o * Anterisco
+					           }
+					           else if(c==8&&a){     //8 é o caractere BackSpace na tabela ASCII, && a analisa se a é diferente de 0
+					           senha[a]='\0';
+					           a--;
+					           printf("\b \b");       //Apagando o caractere digitado
+					           } 
+					       }while(c!=13); 
 
 							clienteLogado = loginCliente(cpf, senha, repositorioCliente);
 							//printf("%i", retornoCliente);
@@ -278,8 +315,6 @@ int main(int argc, char *argv[]) {
             break;
 
             case 2://Funcionário
-
-                
                 funcionarioLogado = loginFuncionarioMain(repositorioFuncionario);
                 
                 if(funcionarioLogado.error == 0){
@@ -342,7 +377,20 @@ int main(int argc, char *argv[]) {
 					printf("Digite o id do Administrador: ");
 					gets(idAdmin);
 					printf("Digite a senha do Administrador: ");
-					gets(senhaAdmin);
+					do{
+			           c=getch();
+			           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
+			           senhaAdmin[a]=c;  //Se for, armazena o caractere 
+			           a++;
+			           printf("*");          //imprime o * Anterisco
+			           }
+			           else if(c==8&&a){     //8 é o caractere BackSpace na tabela ASCII, && a analisa se a é diferente de 0
+			           senhaAdmin[a]='\0';
+			           a--;
+			           printf("\b \b");       //Apagando o caractere digitado
+			           } 
+			        }while(c!=13); 
+                    senhaAdmin[i] = '\0';
 					retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
 
 					if(retornoValidacao != 1){
