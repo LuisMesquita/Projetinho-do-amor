@@ -1,20 +1,41 @@
 #ifndef SISTEMA_H
 #define SISTEMA_H
 
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "Cliente.h"
 #include "Funcionario.h"
 #include "Produto.h"
 
-typedef struct{
-	Produto repositorioProduto[1000];
-	Cliente repositorioCliente[1000];
-	Funcionario repositorioFuncionario[1000];
+typedef struct {
 	int incrementoCliente;
 	int incrementoFuncionario;
 	int incrementoProduto;
 }Sistema;
 
-/*void salvarSistema(){
+void salvarSistema(Sistema* sistema, int quantidade);
+void lerSistema(Sistema* sistema, int quantidade);
+
+void salvarSistema(Sistema* sistema, int quantidade){
+	FILE *arq;
+	arq = fopen("Sistema.txt", "wb");
+	fwrite(sistema, sizeof(Sistema), quantidade, arq);
+	fclose(arq);
+}
+void lerSistema(Sistema* sistema, int quantidade){
+	FILE *arq;
+	if(fopen("Sistema.txt", "rb") == NULL){
+		sistema->incrementoCliente = 0;
+		sistema->incrementoFuncionario = 0;
+		sistema->incrementoProduto = 0;
+	}
+	else{
+		arq = fopen("Sistema.txt", "rb");
+	}
+	fread(sistema, sizeof(Sistema), quantidade, arq);
+	fclose(arq);
+}
 	
 
 #endif

@@ -9,7 +9,7 @@
 #include "LojaGeek.h"
 #include "Sistema.h"
 
-FuncionarioResponse loginFuncionario(){
+FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	getchar();
 	int contErros = 0;
 	system("cls");
@@ -30,10 +30,10 @@ FuncionarioResponse loginFuncionario(){
 		}
 		contErros++;
 	}while(retornoFuncionario.error != 1 && contErros <=3 );
-	return retornoFuncionario.funcionario;
+	return retornoFuncionario;
 }
 
-void alterarProduto(){
+void alterarProduto(Produto *repositorioProduto){
     Produto pa;
     char codigo[10];
     getchar();
@@ -58,7 +58,8 @@ void alterarProduto(){
     alterarCadastroProduto(codigo, pa, repositorioProduto);
 }
 
-void removerProduto(){
+void removerProdutoMain(Produto *repositorioProduto){
+	char codigoProduto[10];
     getchar();
     system("cls");
     printf("digite o codigo do produto que deseja remover");
@@ -66,7 +67,8 @@ void removerProduto(){
     removerProduto(codigoProduto, repositorioProduto);
 }
 
-void criarProduto(){
+void criarProduto(int incrementoProduto, Produto *repositorioProduto){
+	Produto p;
     getchar();
     system("cls");
     printf("Digite o nome do produto");
@@ -112,7 +114,17 @@ void printarMenuAdmin() {
     printf("\n3 - Logout\n");
 }
 
-void criarCliente(int incremento, Cliente *repositorioCliente) {
+void PrintarMenuFuncinario(){
+system("csl");
+printf("TELA DE FUNCIONARIO");
+printf("\nSELECIONE UMA OPÇÃO");
+printf("\n1 - Cadastrar produto");
+printf("\n2 - Remover produto");
+printf("\n3 - Alterar produto");
+printf("\n4 - Voltar");
+}
+
+void criarCliente(int incrementoCliente, Cliente *repositorioCliente) {
     Cliente c;
     getchar();
     system("cls");
@@ -142,10 +154,10 @@ void criarCliente(int incremento, Cliente *repositorioCliente) {
         }
     }while(retornoSenhaCliente != 0);
     strcpy(c.senha, senhaCliente);
-    int retornoCadastroCliente = cadastrarCliente(c, repositorioCliente, incremento);
+    int retornoCadastroCliente = cadastrarCliente(c, repositorioCliente, incrementoCliente);
 
     if(retornoCadastroCliente == 1){
-        incremento++;
+        incrementoCliente++;
         system("cls");
         printf("Cadastrado com sucesso!\n");
         //printf("%i", incremento);
@@ -153,7 +165,7 @@ void criarCliente(int incremento, Cliente *repositorioCliente) {
     }
 }
 
-void criarFuncionario(int incremento, Funcionario *repositorioFuncionario) {
+void criarFuncionario(int incrementoFuncionario, Funcionario *repositorioFuncionario) {
     system("cls");
     Funcionario funcionario;
     funcionario.status = 1;
@@ -183,7 +195,7 @@ void criarFuncionario(int incremento, Funcionario *repositorioFuncionario) {
     }while(retornoSenhaFuncionario != 0);
     strcpy(funcionario.senha, senhaFuncionario);
 
-    if(cadastrarFuncionario(funcionario,incremento, repositorioFuncionario) == 1) {
+    if(cadastrarFuncionario(funcionario, incrementoFuncionario, repositorioFuncionario) == 1) {
         printf("Funcionário cadastrado com sucesso");
     } else {
         printf("Algum erro aconteceu, tente novamente");
@@ -192,13 +204,17 @@ void criarFuncionario(int incremento, Funcionario *repositorioFuncionario) {
 
 int main(int argc, char *argv[]) {
 	int op;
-	static int incremento = 0;
-	setlocale(LC_ALL, "Portuguese");
+	Sistema sistema;
+	lerSistema(&sistema, 1);
+	int incrementoCliente, incrementoFuncionario, incrementoProduto;
+	incrementoCliente = sistema.incrementoCliente;
+	incrementoFuncionario = sistema.incrementoFuncionario;
+	incrementoProduto = sistema.incrementoProduto;
+	
 	Cliente repositorioCliente[1000];
-	Produto repositorioProduto[1000];
 	Funcionario repositorioFuncionario[1000];
-	lerCliente(repositorioCliente, 2);
-
+	Produto repositorioProduto[1000];
+	setlocale(LC_ALL, "Portuguese");
 	do{
         Cliente c;
 		char senhaAdmin[5];
@@ -211,6 +227,8 @@ int main(int argc, char *argv[]) {
 		int retornoCadastroCliente;
 		int retornoValidacao;
 		int countErros;
+		FuncionarioResponse funcionarioLogado;
+		int opFuncionario;
 		//int incremento = 1;
         printarMenuPrincipal();
         scanf("%i", &op);
@@ -249,7 +267,7 @@ int main(int argc, char *argv[]) {
                     break;
 
                     case 2: //Cadastro
-                    	criarCliente(incremento, &repositorioCliente);
+                    	criarCliente(incrementoCliente, &repositorioCliente);
                     break;
 					case 3:
 					break; //Voltar
@@ -260,9 +278,9 @@ int main(int argc, char *argv[]) {
             break;
 
             case 2:
-            	FuncionarioResponse funcionarioLogado;
+
                 
-                funcionarioLogado = loginFuncionario();
+                funcionarioLogado = loginFuncionarioMain(&sistema);
                 
                 if(funcionarioLogado.error == 1){
                 	printf("Funcionário não encontrado");
@@ -270,7 +288,7 @@ int main(int argc, char *argv[]) {
 				}
 				
 				system("cls");
-				printf("Bem vindo %s\n", retornoFuncionario.funcionario.nome);
+				printf("Bem vindo %s\n", funcionarioLogado.funcionario.nome);
 				PrintarMenuFuncinario();
 				scanf("%i", &opFuncionario);
 
@@ -278,15 +296,15 @@ int main(int argc, char *argv[]) {
 				switch (opFuncionario)
 				{
                     case 1:
-                        criarProduto();  //adiciona um produto novo
+                        criarProduto(incrementoProduto, repositorioProduto);  //adiciona um produto novo
                         break;
 
                     case 2:
-                        removerProduto(); //remove um produto existente
+                        removerProdutoMain(repositorioProduto); //remove um produto existente
                     break;
 
                     case 3:
-                        alterarProduto(); //altera as caracteristicas de um produto
+                        alterarProduto(repositorioProduto); //altera as caracteristicas de um produto
                     break;
 
                     case 4:
@@ -323,7 +341,7 @@ int main(int argc, char *argv[]) {
 						scanf("%i", &opAdmin);
 						switch(opAdmin) {
 							case 1://Adicionar Funcionário
-							    criarFuncionario(incremento, repositorioFuncionario);
+							    criarFuncionario(incrementoFuncionario, repositorioFuncionario);
 								break;
 							case 2: //Adicionar produto
 							    system("cls");

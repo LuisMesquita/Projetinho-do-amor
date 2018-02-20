@@ -107,7 +107,7 @@ FuncionarioResponse loginFuncionario(char cpf[11], char senha[8], Funcionario *r
     FuncionarioResponse response;
     int indice;
     indice = getIndiceCpf(cpf, repositorioFuncionario);
-    if(strcmp(senha, repositorioFuncionario[indice].senha == 0)){
+    if(strcmp(senha, repositorioFuncionario[indice].senha) == 0){
         response.error = 1;
         response.funcionario = repositorioFuncionario[indice];
     }
