@@ -19,13 +19,15 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	FuncionarioResponse retornoFuncionario;
 	retornoFuncionario.error= 0;
 	do{
-		getchar();
+		//getchar();
 		printf("\nDigite seu CPF (somente números): ");
 		gets(cpfFuncionario);
+		fflush(stdin);
 		printf("Digite sua senha: ");
 		gets(senhaFuncionario);
+		fflush(stdin);
 		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
-		if(retornoFuncionario.error != 1){
+		if(retornoFuncionario.error == 0){
 			printf("CPF ou senha incorretos, digite novamente!");
 		}
 		contErros++;
@@ -33,38 +35,28 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	return retornoFuncionario;
 }
 
-void alterarProduto(Produto *repositorioProduto){
+void alterarProduto(char codigo[10], Produto *repositorioProduto){
     Produto pa;
-    char codigo[10];
     getchar();
     system("cls");
     printf("Digite o código do produto a ser alterado: ");
     gets(codigo);
 
-    printf("Digite o nome do produto");
+    printf("Digite o nome do produto: ");
     gets(pa.nome);
-    printf("Digite o valor do produto");
+    printf("Digite o valor do produto: ");
     scanf("%f", &pa.valor);
-    printf("Digite a descrição do produto");
+    printf("Digite a descrição do produto: ");
     gets(pa.descricao);
-    printf("Digite a categoria do produto");
+    printf("Digite a categoria do produto: ");
     gets(pa.categoria);
-    printf("Digite o tamanho do produto");
+    printf("Digite o tamanho do produto: ");
     gets(pa.tamanho);
-    printf("Digite o codigo do produto");
+    printf("Digite o codigo do produto: ");
     gets(pa.codigo);
-    printf("Digite a quantidade que deseja adicionar");
+    printf("Digite a quantidade que deseja adicionar: ");
     scanf("%i", &pa.qtd_Itens);
     alterarCadastroProduto(codigo, pa, repositorioProduto);
-}
-
-void removerProdutoMain(Produto *repositorioProduto){
-	char codigoProduto[10];
-    getchar();
-    system("cls");
-    printf("digite o codigo do produto que deseja remover");
-    gets(codigoProduto);
-    removerProduto(codigoProduto, repositorioProduto);
 }
 
 void criarProduto(int incrementoProduto, Produto *repositorioProduto){
@@ -111,17 +103,19 @@ void printarMenuAdmin() {
     printf("SELECIONE UMA OPÇÃOO: ");
     printf("\n1 - Adicionar Funcionário");
     printf("\n2 - Adicionar Produto");
-    printf("\n3 - Logout\n");
+    printf("\n3 - Remover Produto");
+    printf("\n4 - Alterar Produto");
+    printf("\n5 - Logout\n");
 }
 
 void PrintarMenuFuncinario(){
-system("csl");
-printf("TELA DE FUNCIONARIO");
-printf("\nSELECIONE UMA OPÇÃO");
-printf("\n1 - Cadastrar produto");
-printf("\n2 - Remover produto");
-printf("\n3 - Alterar produto");
-printf("\n4 - Voltar");
+	system("csl");
+	printf("TELA DE FUNCIONARIO");
+	printf("\nSELECIONE UMA OPÇÃO");
+	printf("\n1 - Cadastrar produto");
+	printf("\n2 - Remover produto");
+	printf("\n3 - Alterar produto");
+	printf("\n4 - Voltar");
 }
 
 void criarCliente(int incrementoCliente, Cliente *repositorioCliente) {
@@ -223,10 +217,16 @@ int main(int argc, char *argv[]) {
 		char senhaClienteComp[8];
 		char cpf[11];
 		char senha[8];
+		char codigoProdutoAdmim[10];
+		char codigoProdutoFuncionario[10];
 		int retornoSenhaCliente;
 		int retornoCadastroCliente;
 		int retornoValidacao;
 		int countErros;
+		int indiceRemocaoProdutoAdmin;
+		int opRemoverProdutoAdmin;
+		int indiceRemocaoProdutoFuncionario;
+		int opRemoverProdutoFuncionario;
 		FuncionarioResponse funcionarioLogado;
 		int opFuncionario;
 		//int incremento = 1;
@@ -267,7 +267,7 @@ int main(int argc, char *argv[]) {
                     break;
 
                     case 2: //Cadastro
-                    	criarCliente(incrementoCliente, &repositorioCliente);
+                    	criarCliente(incrementoCliente, repositorioCliente);
                     break;
 					case 3:
 					break; //Voltar
@@ -277,12 +277,12 @@ int main(int argc, char *argv[]) {
 
             break;
 
-            case 2:
+            case 2://Funcionário
 
                 
-                funcionarioLogado = loginFuncionarioMain(&sistema);
+                funcionarioLogado = loginFuncionarioMain(repositorioFuncionario);
                 
-                if(funcionarioLogado.error == 1){
+                if(funcionarioLogado.error == 0){
                 	printf("Funcionário não encontrado");
                 	break;
 				}
@@ -300,11 +300,30 @@ int main(int argc, char *argv[]) {
                         break;
 
                     case 2:
-                        removerProdutoMain(repositorioProduto); //remove um produto existente
+                       	getchar();
+						printf("REMOVER PRODUTO\n");
+						printf("Digite o código do produto: ");
+						gets(codigoProdutoFuncionario);
+						indiceRemocaoProdutoFuncionario = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
+						if(indiceRemocaoProdutoFuncionario > 0){
+							printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoFuncionario].nome);
+							printf("\n1 - Remover");
+							printf("\n2 - Cancelar");
+							switch(opRemoverProdutoFuncionario){
+								case 1:
+									removerProduto(codigoProdutoFuncionario, repositorioProduto);
+									printf("Produto Removido com sucesso!");
+								break;
+								case 2: break;	
+							}
+						}
+						else{
+							printf("Produto inexistente!");
+						}
                     break;
 
                     case 3:
-                        alterarProduto(repositorioProduto); //altera as caracteristicas de um produto
+                        break;
                     break;
 
                     case 4:
@@ -314,7 +333,7 @@ int main(int argc, char *argv[]) {
 				}
 				break;
 
-			case 3:
+			case 3://Administrador
 				getchar();
 				system("cls");
 				countErros = 0;
@@ -328,6 +347,7 @@ int main(int argc, char *argv[]) {
 
 					if(retornoValidacao != 1){
 						printf("ID ou senha inválidos, tente novamente \n");
+						printf("Tentativas: %i", countErros);
 					}
 					countErros++;
 				}while(retornoValidacao != 1 && countErros <=3);
@@ -336,7 +356,6 @@ int main(int argc, char *argv[]) {
 				if(retornoValidacao == 1) { // se logado
 					int opAdmin;
 					do {
-
 						printarMenuAdmin();
 						scanf("%i", &opAdmin);
 						switch(opAdmin) {
@@ -344,21 +363,49 @@ int main(int argc, char *argv[]) {
 							    criarFuncionario(incrementoFuncionario, repositorioFuncionario);
 								break;
 							case 2: //Adicionar produto
-							    system("cls");
+							    criarProduto(incrementoProduto, repositorioProduto);
 								break;
-							case 3: //Logout
+							case 3: //Remover produto
+								getchar();
+								printf("REMOVER PRODUTO\n");
+								printf("Digite o código do produto: ");
+								gets(codigoProdutoAdmim);
+								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
+								if(indiceRemocaoProdutoAdmin > 0){
+									printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
+									printf("\n1 - Remover");
+									printf("\n2 - Cancelar");
+									switch(opRemoverProdutoAdmin){
+										case 1:
+											removerProduto(codigoProdutoAdmim, repositorioProduto);
+											printf("Produto Removido com sucesso!");
+										break;
+										case 2: break;	
+									}
+								}
+								else{
+									printf("Produto inexistente!");
+								}
+								
+								break;
+							case 4: //Alterar produto
+								alterarProduto(codigoProdutoAdmim, repositorioProduto);
+							case 5:
 								break;
 							default:
 								break;
 						}
-					}while(opAdmin != 3);
+					}while(opAdmin != 5);
 				}
 			break;
 
             default:
                 printf("Obrigado pela visita");
+                salvarSistema(&sistema, 1);
+				salvarCliente(repositorioCliente, incrementoCliente);
+				salvarFuncionario(repositorioFuncionario, incrementoFuncionario);
+				salvarProduto(repositorioProduto, incrementoProduto);
             break;
         }
 	}while(op != 4);
-	salvarSistema(&sistema, 1);
 }
