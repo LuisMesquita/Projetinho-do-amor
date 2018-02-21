@@ -6,8 +6,38 @@
 #include "Cliente.h"
 #include "Funcionario.h"
 #include "Produto.h"
-#include "LojaGeek.h"
 #include "Sistema.h"
+#include "Loja.h"
+
+#define MAX_LEN 128
+
+void print_image(FILE *fptr)
+{
+    char read_string[MAX_LEN];
+
+    while(fgets(read_string,sizeof(read_string),fptr) != NULL)
+        printf("%s",read_string);
+}
+
+void logo(){
+    char *filename = "teste.txt";
+    FILE *fptr = NULL;
+
+    if((fptr = fopen(filename,"r")) == NULL)
+    {
+        fprintf(stderr,"error opening %s\n",filename);
+        return 1;
+    }
+
+    print_image(fptr);
+
+    fclose(fptr);
+    char read_string[MAX_LEN];
+
+    while(fgets(read_string,sizeof(read_string),fptr) != NULL)
+        printf("%s",read_string);
+        system ("pause");
+}
 
 void esqueciSenha(Cliente *repositorioCliente){
 	getchar();
@@ -87,6 +117,7 @@ void alterarProduto(char codigo[10], Produto *repositorioProduto){
     gets(pa.nome);
     printf("Digite o valor do produto: ");
     scanf("%f", &pa.valor);
+    getchar();
     printf("Digite a descrição do produto: ");
     gets(pa.descricao);
     printf("Digite a categoria do produto: ");
@@ -104,20 +135,22 @@ void criarProduto(int incrementoProduto, Produto *repositorioProduto){
 	Produto p;
     getchar();
     system("cls");
-    printf("Digite o nome do produto");
+    printf("Digite o nome do produto: ");
     gets(p.nome);
-    printf("Digite o valor do produto");
+    printf("Digite o valor do produto: ");
     scanf("%f", &p.valor);
-    printf("Digite a descrição do produto");
+    getchar();
+    printf("Digite a descrição do produto: ");
     gets(p.descricao);
-    printf("Digite a categoria do produto");
+    printf("Digite a categoria do produto: ");
     gets(p.categoria);
-    printf("Digite o tamanho do produto");
+    printf("Digite o tamanho do produto: ");
     gets(p.tamanho);
-    printf("Digite o codigo do produto");
+    printf("Digite o codigo do produto: ");
     gets(p.codigo);
-    printf("Digite a quantidade que deseja adicionar");
+    printf("Digite a quantidade que deseja adicionar: ");
     scanf("%i", &p.qtd_Itens);
+    printf("\n");
     cadastrarProduto(p, incrementoProduto, repositorioProduto);
 }
 
@@ -137,7 +170,7 @@ void printarMenuCliente() {
     printf("\n1 - Login");
     printf("\n2 - Cadastro");
     printf("\n3 - Esqueci a senha");
-    printf("\n3 - Voltar\n");
+    printf("\n4 - Voltar\n");
 }
 
 void printarMenuAdmin() {
@@ -147,7 +180,8 @@ void printarMenuAdmin() {
     printf("\n2 - Adicionar Produto");
     printf("\n3 - Remover Produto");
     printf("\n4 - Alterar Produto");
-    printf("\n5 - Logout\n");
+    printf("\n5 - Adicionar Itens");
+    printf("\n6 - Logout\n");
 }
 
 void PrintarMenuFuncinario(){
@@ -157,7 +191,7 @@ void PrintarMenuFuncinario(){
 	printf("\n1 - Cadastrar produto");
 	printf("\n2 - Remover produto");
 	printf("\n3 - Alterar produto");
-	printf("\n4 - Voltar");
+	printf("\n4 - Voltar\n");
 }
 
 void criarCliente(int incrementoCliente, Cliente *repositorioCliente) {
@@ -250,14 +284,14 @@ int main(int argc, char *argv[]) {
 	lerIncrementoFuncionario(&incrementoFuncionario, 1);
 	lerIncrementoProduto(&incrementoProduto, 1);
 	
-	printf("%i", incrementoFuncionario);
-	
 	lerCliente(repositorioCliente, incrementoCliente);
 	lerFuncionario(repositorioFuncionario, incrementoFuncionario);
 	lerProduto(repositorioProduto, incrementoProduto);
 	
 	system("color f1");
 	setlocale(LC_ALL, "Portuguese");
+	
+	logo();
 	do{
         Cliente c1;
         char c;
@@ -278,6 +312,7 @@ int main(int argc, char *argv[]) {
 		int opRemoverProdutoAdmin;
 		int indiceRemocaoProdutoFuncionario;
 		int opRemoverProdutoFuncionario;
+		int qtd_ItensAdmin;
 		FuncionarioResponse funcionarioLogado;
 		int opFuncionario;
 		int i;
@@ -326,9 +361,11 @@ int main(int argc, char *argv[]) {
 							}
 						}while(clienteLogado.error != 1 && countErros <= 3);
 						system("cls");
+						printf("LOLJA\n");
 						if (clienteLogado.error == 1) {
 							printf("Bem vindo, %s\n" ,clienteLogado.cliente.nome);
 							system("pause");
+							iniciarLoja(repositorioProduto, incrementoProduto);
 						}
 
                     break;
@@ -358,6 +395,7 @@ int main(int argc, char *argv[]) {
 				
 				system("cls");
 				printf("Bem vindo %s\n", funcionarioLogado.funcionario.nome);
+				system("pause");
 				PrintarMenuFuncinario();
 				scanf("%i", &opFuncionario);
 
@@ -366,6 +404,7 @@ int main(int argc, char *argv[]) {
 				{
                     case 1:
                         criarProduto(incrementoProduto, repositorioProduto);  //adiciona um produto novo
+                        incrementoProduto++;
                         break;
 
                     case 2:
@@ -373,11 +412,16 @@ int main(int argc, char *argv[]) {
 						printf("REMOVER PRODUTO\n");
 						printf("Digite o código do produto: ");
 						gets(codigoProdutoFuncionario);
+						
 						indiceRemocaoProdutoFuncionario = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
+						printf("%i %i", indiceRemocaoProdutoFuncionario, codigoProdutoFuncionario);
+						
 						if(indiceRemocaoProdutoFuncionario > 0){
+							getchar();
 							printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoFuncionario].nome);
 							printf("\n1 - Remover");
-							printf("\n2 - Cancelar");
+							printf("\n2 - Cancelar\n");
+							scanf("%i", opRemoverProdutoFuncionario);
 							switch(opRemoverProdutoFuncionario){
 								case 1:
 									removerProduto(codigoProdutoFuncionario, repositorioProduto);
@@ -403,6 +447,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 3://Administrador
+				//LOGIN BUGADO APÓS PRIMEIRA TENTATIVA
 				getchar();
 				system("cls");
 				countErros = 0;
@@ -447,6 +492,7 @@ int main(int argc, char *argv[]) {
 								break;
 							case 2: //Adicionar produto
 							    criarProduto(incrementoProduto, repositorioProduto);
+							    incrementoProduto++;
 								break;
 							case 3: //Remover produto
 								getchar();
@@ -454,7 +500,7 @@ int main(int argc, char *argv[]) {
 								printf("Digite o código do produto: ");
 								gets(codigoProdutoAdmim);
 								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
-								if(indiceRemocaoProdutoAdmin > 0){
+								if(indiceRemocaoProdutoAdmin >= 0){
 									printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
 									printf("\n1 - Remover");
 									printf("\n2 - Cancelar");
@@ -473,7 +519,39 @@ int main(int argc, char *argv[]) {
 								break;
 							case 4: //Alterar produto
 								alterarProduto(codigoProdutoAdmim, repositorioProduto);
-							case 5:
+							case 5://Adiconar itens
+								getchar();
+								system("cls");
+								printf("ADICIONAR ITENS\n");
+								printf("Digite o código do produto: ");
+								gets(codigoProdutoAdmim);
+								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
+								
+								printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceRemocaoProdutoAdmin].qtd_Itens);
+								printf("Digite a quantidade de itens que serão adicionados: ");
+								scanf("%i", &qtd_ItensAdmin);
+								getchar();
+								
+								if(indiceRemocaoProdutoAdmin >= 0){
+									printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
+									printf("\n1 - Adicionar");
+									printf("\n2 - Cancelar\n");
+									gets(opRemoverProdutoAdmin);
+									switch(opRemoverProdutoAdmin){
+										//NÃO ESTÁ FUNCIONANDO
+										case 1:
+											adicionarItens(codigoProdutoAdmim, qtd_ItensAdmin, repositorioProduto);
+											printf("Itens adicionados com sucesso!");
+											printf("O produto %s tem %i itens.", repositorioProduto[indiceRemocaoProdutoAdmin].nome, repositorioProduto[indiceRemocaoProdutoAdmin].qtd_Itens);
+										break;
+										case 2: break;	
+									}
+								}
+								else{
+									printf("Produto inexistente!");
+								}
+								break;
+							case 6:
 								break;
 							default:
 								break;

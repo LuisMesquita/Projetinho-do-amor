@@ -145,13 +145,17 @@ int removerItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
 }
 int adicionarItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
     ProductResponse p;
+    int indice;
+    indice = getIndiceProduto(codigo, repositorioProduto);
 	p = procurarProduto(codigo, repositorioProduto);
 	if(p.produto.status == 1){
         p.produto.qtd_Itens += qtd_Itens;
         p.error = 0;
+        repositorioProduto[indice] = p.produto;
 	}
 	else{
         p.error = 1;
+        repositorioProduto[indice] = p.produto;
 	}
 	return p.error;
 }

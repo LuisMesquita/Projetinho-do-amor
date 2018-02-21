@@ -9,7 +9,7 @@ typedef struct {
 	int status;
 	float valor;
 	char descricao[250];
-	char tamanho[2];
+	char tamanho[10];
 	char codigo[10];
 	char nome[20];
 	char categoria[20];
