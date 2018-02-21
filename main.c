@@ -600,7 +600,7 @@ int main(int argc, char *argv[]) {
 						if (clienteLogado.error == 1) {
 							printf("Bem vindo, %s\n" ,clienteLogado.cliente.nome);
 							system("pause");
-							iniciarLoja(repositorioProduto, incrementoProduto);
+							iniciarLoja(repositorioProduto, incrementoProduto, &clienteLogado.cliente);
 						}
 
                     break;
