@@ -96,7 +96,7 @@ void iniciarLoja(Produto* repositorioProduto, int incrementoProduto) {
 								printf("\nProduto adicionado no carrinho com sucesso.\n");
 								produtoResponse.produto.qtd_Itens-=1;
 								if(produtoResponse.produto.qtd_Itens <= 5){
-									printf("Produto acabando, restam %d unidades", produtoResponse.produto.qtd_Itens);
+									printf("Produto acabando, restam %d unidades\n", produtoResponse.produto.qtd_Itens);
 								}
 								indice = getIndiceProduto(listaOp, repositorioProduto);
 								repositorioProduto[indice] = produtoResponse.produto;

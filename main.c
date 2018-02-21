@@ -128,6 +128,7 @@ void alterarProduto(char codigo[10], Produto *repositorioProduto){
     gets(pa.codigo);
     printf("Digite a quantidade que deseja adicionar: ");
     scanf("%i", &pa.qtd_Itens);
+    printf("\n");
     alterarCadastroProduto(codigo, pa, repositorioProduto);
 }
 
@@ -556,7 +557,7 @@ int main(int argc, char *argv[]) {
 							default:
 								break;
 						}
-					}while(opAdmin != 5);
+					}while(opAdmin != 6);
 				}
 			break;
 

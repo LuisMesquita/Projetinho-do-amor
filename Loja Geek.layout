@@ -8,9 +8,9 @@ LeftChar=1
 Order=4,2,1,3,0,5
 Focused=0
 [Editor_0]
-CursorCol=43
-CursorRow=450
-TopLine=484
+CursorCol=18
+CursorRow=131
+TopLine=106
 =======
 CursorCol=7
 CursorRow=104
@@ -51,7 +51,7 @@ TopLine=9
 >>>>>>> Stashed changes
 LeftChar=1
 [Editor_5]
-CursorCol=10
-CursorRow=100
-TopLine=109
+CursorCol=56
+CursorRow=99
+TopLine=82
 LeftChar=1
