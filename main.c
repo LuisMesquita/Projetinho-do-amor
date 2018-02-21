@@ -67,7 +67,6 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	       } 
 	   	}while(c!=13); 
         printf("\n");
-        senhaFuncionario[i] = '\0';
 		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
 		if(retornoFuncionario.error == 0){
 			printf("CPF ou senha incorretos, digite novamente!");
@@ -152,7 +151,7 @@ void printarMenuAdmin() {
 }
 
 void PrintarMenuFuncinario(){
-	system("csl");
+	system("cls");
 	printf("TELA DE FUNCIONARIO");
 	printf("\nSELECIONE UMA OPÇÃO");
 	printf("\n1 - Cadastrar produto");
@@ -213,14 +212,15 @@ void criarFuncionario(int incrementoFuncionario, Funcionario *repositorioFuncion
     printf("Qual o endereço?\n");
     gets(funcionario.endereco);
     printf("Qual o cpf?\n");
-    scanf("%i", &funcionario.cpf);
+    gets(funcionario.cpf);
 
     char senhaFuncionario[20], senhaFuncionarioComp[20];
     int retornoSenhaFuncionario;
     do{
-        getchar();
+        fflush(stdin);
         printf("Digite uma senha com 8 digitos: ");
         gets(senhaFuncionario);
+        fflush(stdin);
         printf("Confirme a senha: ");
         gets(senhaFuncionarioComp);
 
@@ -233,6 +233,7 @@ void criarFuncionario(int incrementoFuncionario, Funcionario *repositorioFuncion
 
     if(cadastrarFuncionario(funcionario, incrementoFuncionario, repositorioFuncionario) == 1) {
         printf("Funcionário cadastrado com sucesso");
+        system("pause");
     } else {
         printf("Algum erro aconteceu, tente novamente");
     }
@@ -442,6 +443,7 @@ int main(int argc, char *argv[]) {
 						switch(opAdmin) {
 							case 1://Adicionar Funcionário
 							    criarFuncionario(incrementoFuncionario, repositorioFuncionario);
+							    incrementoFuncionario++;
 								break;
 							case 2: //Adicionar produto
 							    criarProduto(incrementoProduto, repositorioProduto);

@@ -67,7 +67,6 @@ int cadastrarFuncionario(Funcionario f, int incremento, Funcionario *repositorio
     repositorioFuncionario[incremento] = response.funcionario;
 
     response.error = 1; // Funcionario Cadastrado com sucesso;
-
     return response.error;
 }
 int removerFuncionario(char cpf[11], Funcionario *repositorioFuncionario){
