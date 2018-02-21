@@ -5,7 +5,7 @@ CursorRow=69
 TopLine=55
 LeftChar=1
 [Editors]
-Order=5
+Order=5,4
 Focused=5
 [Editor_0]
 CursorCol=58
@@ -37,9 +37,9 @@ CursorRow=36
 TopLine=1
 LeftChar=1
 [Editor_4]
-CursorCol=54
-CursorRow=17
-TopLine=10
+CursorCol=7
+CursorRow=71
+TopLine=42
 =======
 CursorRow=190
 TopLine=146
@@ -51,7 +51,7 @@ TopLine=9
 >>>>>>> Stashed changes
 LeftChar=1
 [Editor_5]
-CursorCol=50
-CursorRow=31
-TopLine=10
+CursorCol=17
+CursorRow=57
+TopLine=43
 LeftChar=1

@@ -4,36 +4,66 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "Cliente.h"
-#include "Funcionario.h"
-#include "Produto.h"
 
-typedef struct {
-	int incrementoCliente;
-	int incrementoFuncionario;
-	int incrementoProduto;
-}Sistema;
+void salvarIncrementoCliente(int* incrementoCliente, int quantidade);
+void salvarIncrementoFuncionario(int* incrementoFuncionario, int quantidade);
+void salvarIncrementoProduto(int *incrementoProduto, int quantidade);
+void lerIncrementoCliente(int *incrementoCliente, int quantidade);
+void lerIncrementoProduto(int *incrementoProduto, int quantidade);
+void lerIncrementoFuncionario(int *incrementoFuncionario, int quantidade);
 
-void salvarSistema(Sistema* sistema, int quantidade);
-void lerSistema(Sistema* sistema, int quantidade);
-
-void salvarSistema(Sistema* sistema, int quantidade){
+void salvarIncrementoCliente(int* incrementoCliente, int quantidade){
 	FILE *arq;
-	arq = fopen("Sistema.txt", "w");
-	fwrite(sistema, sizeof(Sistema), quantidade, arq);
+	arq = fopen("IncrementoCliente.txt", "wb");
+	fwrite(&incrementoCliente, sizeof(int), quantidade, arq);
 	fclose(arq);
 }
-void lerSistema(Sistema* sistema, int quantidade){
+void salvarIncrementoFuncionario(int* incrementoFuncionario, int quantidade){
 	FILE *arq;
-	if(fopen("Sistema.txt", "r") == NULL){
-		sistema->incrementoCliente = 0;
-		sistema->incrementoFuncionario = 0;
-		sistema->incrementoProduto = 0;
+	arq = fopen("IncrementoFuncionario.txt", "wb");
+	fwrite(&incrementoFuncionario, sizeof(int), quantidade, arq);
+	fclose(arq);
+}
+void salvarIncrementoProduto(int *incrementoProduto, int quantidade){
+	FILE *arq;
+	arq = fopen("IncrementoProduto.txt", "wb");
+	fwrite(&incrementoProduto, sizeof(int), quantidade, arq);
+	fclose(arq);
+}
+void lerIncrementoCliente(int *incrementoCliente, int quantidade){
+	FILE *arq;
+	if(fopen("IncrementoCliente.txt", "rb") == NULL){
+		incrementoCliente = 0;
+		arq = fopen("IncrementoCliente.txt", "rb");
 	}
 	else{
-		arq = fopen("Sistema.txt", "r");
+		arq = fopen("IncrementoCliente.txt", "rb");
 	}
-	fread(sistema, sizeof(Sistema), quantidade, arq);
+	fread(incrementoCliente, sizeof(int), quantidade, arq);
+	fclose(arq);
+}
+void lerIncrementoFuncionario(int *incrementoFuncionario, int quantidade){
+	FILE *arq;
+	if(fopen("IncrementoFuncionario.txt", "rb") == NULL){
+		incrementoFuncionario = 0;
+		arq = fopen("IncrementoFuncionario.txt", "rb");
+	}
+	else{
+		arq = fopen("IncrementoFuncionario.txt", "rb");
+	}
+	fread(incrementoFuncionario, sizeof(int), quantidade, arq);
+	fclose(arq);
+}
+void lerIncrementoProduto(int *incrementoProduto, int quantidade){
+	FILE *arq;
+	if(fopen("IncrementoProduto.txt", "rb") == NULL){
+		incrementoProduto = 0;
+		arq = fopen("IncrementoProduto.txt", "rb");
+	}
+	else{
+		arq = fopen("IncrementoProduto.txt", "rb");
+	}
+	fread(incrementoProduto, sizeof(int), quantidade, arq);
 	fclose(arq);
 }
 	

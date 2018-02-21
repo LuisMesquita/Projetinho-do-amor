@@ -8,6 +8,7 @@
 #include "Produto.h"
 #include "LojaGeek.h"
 #include "Sistema.h"
+
 void esqueciSenha(Cliente *repositorioCliente){
 	getchar();
 	system("cls");
@@ -52,7 +53,6 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 		printf("\nDigite seu CPF (somente números): ");
 		gets(cpfFuncionario);
 		printf("Digite sua senha: ");
-		for (i = 0; i < 8; i++)
 	   	do{
 	       c=getch();
 	       if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
@@ -194,7 +194,6 @@ void criarCliente(int incrementoCliente, Cliente *repositorioCliente) {
     int retornoCadastroCliente = cadastrarCliente(c, repositorioCliente, incrementoCliente);
 
     if(retornoCadastroCliente == 1){
-        incrementoCliente++;
         system("cls");
         printf("Cadastrado com sucesso!\n");
         //printf("%i", incremento);
@@ -246,12 +245,11 @@ int main(int argc, char *argv[]) {
 	Produto repositorioProduto[1000];
 	int incrementoCliente, incrementoFuncionario, incrementoProduto;
 	
-	Sistema sistema;
-	lerSistema(&sistema, 1);
-	//printf("%i", sistema.incrementoCliente);
-	incrementoCliente = sistema.incrementoCliente;
-	incrementoFuncionario = sistema.incrementoFuncionario;
-	incrementoProduto = sistema.incrementoProduto;
+	lerIncrementoCliente(&incrementoCliente, 1);
+	lerIncrementoFuncionario(&incrementoFuncionario, 1);
+	lerIncrementoProduto(&incrementoProduto, 1);
+	
+	printf("%i", incrementoFuncionario);
 	
 	lerCliente(repositorioCliente, incrementoCliente);
 	lerFuncionario(repositorioFuncionario, incrementoFuncionario);
@@ -328,7 +326,7 @@ int main(int argc, char *argv[]) {
 						}while(clienteLogado.error != 1 && countErros <= 3);
 						system("cls");
 						if (clienteLogado.error == 1) {
-							printf("Bem vindo %s\n" ,clienteLogado.cliente.nome);
+							printf("Bem vindo, %s\n" ,clienteLogado.cliente.nome);
 							system("pause");
 						}
 
@@ -336,6 +334,7 @@ int main(int argc, char *argv[]) {
 
                     case 2: //Cadastro
                     	criarCliente(incrementoCliente, repositorioCliente);
+                    	incrementoCliente++;
                     break;
                     case 3:
                     	esqueciSenha(repositorioCliente);
@@ -424,7 +423,7 @@ int main(int argc, char *argv[]) {
 			           printf("\b \b");       //Apagando o caractere digitado
 			           } 
 			        }while(c!=13); 
-                    senhaAdmin[i] = '\0';
+                    
 					retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
 
 					if(retornoValidacao != 1){
@@ -483,7 +482,9 @@ int main(int argc, char *argv[]) {
 
             default:
                 printf("Obrigado pela visita");
-                salvarSistema(&sistema, 1);
+                salvarIncrementoCliente(incrementoCliente, 1);
+                salvarIncrementoFuncionario(incrementoFuncionario, 1);
+                salvarIncrementoProduto(incrementoProduto, 1);
 				salvarCliente(repositorioCliente, incrementoCliente);
 				salvarFuncionario(repositorioFuncionario, incrementoFuncionario);
 				salvarProduto(repositorioProduto, incrementoProduto);
