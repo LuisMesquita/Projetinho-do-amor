@@ -47,7 +47,7 @@ void esqueciSenha(Cliente *repositorioCliente){
 	char novaSenha[8];
 	char senhaComp[8];
 	int retornoSenhaCliente;
-	
+
 	printf("Digite seu CPF: ");
 	gets(cpf);
 	printf("Digite seu e-mail: ");
@@ -86,7 +86,7 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	   	do{
 	       c=getch();
 	       if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
-	       senhaFuncionario[a]=c;  //Se for, armazena o caractere 
+	       senhaFuncionario[a]=c;  //Se for, armazena o caractere
 	       a++;
 	       printf("*");          //imprime o * Anterisco
 	       }
@@ -94,8 +94,8 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	       senhaFuncionario[a]='\0';
 	       a--;
 	       printf("\b \b");       //Apagando o caractere digitado
-	       } 
-	   	}while(c!=13); 
+	       }
+	   	}while(c!=13);
         printf("\n");
 		retornoFuncionario = loginFuncionario(cpfFuncionario, senhaFuncionario, repositorioFuncionario);
 		if(retornoFuncionario.error == 0){
@@ -106,10 +106,11 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 	return retornoFuncionario;
 }
 
-void alterarProduto(char codigo[10], Produto *repositorioProduto){
+void alterarProduto(char codigo[10], Produto *repositorioProduto, int incrementoProduto){
     Produto pa;
     getchar();
     system("cls");
+    printarTodosProdutos(repositorioProduto, incrementoProduto);
     printf("Digite o código do produto a ser alterado: ");
     gets(codigo);
 
@@ -280,18 +281,18 @@ int main(int argc, char *argv[]) {
 	Funcionario repositorioFuncionario[1000];
 	Produto repositorioProduto[1000];
 	int incrementoCliente, incrementoFuncionario, incrementoProduto;
-	
+
 	lerIncrementoCliente(&incrementoCliente, 1);
 	lerIncrementoFuncionario(&incrementoFuncionario, 1);
 	lerIncrementoProduto(&incrementoProduto, 1);
-	
+
 	lerCliente(repositorioCliente, incrementoCliente);
 	lerFuncionario(repositorioFuncionario, incrementoFuncionario);
 	lerProduto(repositorioProduto, incrementoProduto);
-	
+
 	system("color f1");
 	setlocale(LC_ALL, "Portuguese");
-	
+
 	logo();
 	do{
         Cliente c1;
@@ -338,11 +339,11 @@ int main(int argc, char *argv[]) {
 							gets(cpf);
 							fflush(stdin);
 							printf("Digite sua senha: ");
-							
+
 							do{
 					           c=getch();
 					           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
-					           senha[a]=c;  		 //Se for, armazena o caractere 
+					           senha[a]=c;  		 //Se for, armazena o caractere
 					           a++;
 					           printf("*");          //imprime o * Anterisco
 					           }
@@ -350,11 +351,11 @@ int main(int argc, char *argv[]) {
 					           senha[a]='\0';
 					           a--;
 					           printf("\b \b");       //Apagando o caractere digitado
-					           } 
-					       }while(c!=13); 
+					           }
+					       }while(c!=13);
 
 							clienteLogado = loginCliente(cpf, senha, repositorioCliente);
-							
+
 							if(clienteLogado.error != 1){
 								printf("\nSenha Incorreta, digite novamente!\n");
 								countErros++;
@@ -377,7 +378,7 @@ int main(int argc, char *argv[]) {
                     break;
                     case 3:
                     	esqueciSenha(repositorioCliente);
-						break; 
+						break;
 					case 4:
 					break; //Voltar
                     default:
@@ -388,12 +389,12 @@ int main(int argc, char *argv[]) {
 
             case 2://Funcionário
                 funcionarioLogado = loginFuncionarioMain(repositorioFuncionario);
-                
+
                 if(funcionarioLogado.error == 0){
                 	printf("Funcionário não encontrado");
                 	break;
 				}
-				
+
 				system("cls");
 				printf("Bem vindo %s\n", funcionarioLogado.funcionario.nome);
 				system("pause");
@@ -413,10 +414,10 @@ int main(int argc, char *argv[]) {
 						printf("REMOVER PRODUTO\n");
 						printf("Digite o código do produto: ");
 						gets(codigoProdutoFuncionario);
-						
+
 						indiceRemocaoProdutoFuncionario = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
 						printf("%i %i", indiceRemocaoProdutoFuncionario, codigoProdutoFuncionario);
-						
+
 						if(indiceRemocaoProdutoFuncionario > 0){
 							getchar();
 							printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoFuncionario].nome);
@@ -428,7 +429,7 @@ int main(int argc, char *argv[]) {
 									removerProduto(codigoProdutoFuncionario, repositorioProduto);
 									printf("Produto Removido com sucesso!");
 								break;
-								case 2: break;	
+								case 2: break;
 							}
 						}
 						else{
@@ -460,7 +461,7 @@ int main(int argc, char *argv[]) {
 					do{
 			           c=getch();
 			           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
-			           senhaAdmin[a]=c;  //Se for, armazena o caractere 
+			           senhaAdmin[a]=c;  //Se for, armazena o caractere
 			           a++;
 			           printf("*");          //imprime o * Anterisco
 			           }
@@ -468,9 +469,9 @@ int main(int argc, char *argv[]) {
 			           senhaAdmin[a]='\0';
 			           a--;
 			           printf("\b \b");       //Apagando o caractere digitado
-			           } 
-			        }while(c!=13); 
-                    
+			           }
+			        }while(c!=13);
+
 					retornoValidacao = validadarAdmin(idAdmin, senhaAdmin);
 
 					if(retornoValidacao != 1){
@@ -510,16 +511,16 @@ int main(int argc, char *argv[]) {
 											removerProduto(codigoProdutoAdmim, repositorioProduto);
 											printf("Produto Removido com sucesso!");
 										break;
-										case 2: break;	
+										case 2: break;
 									}
 								}
 								else{
 									printf("Produto inexistente!");
 								}
-								
+
 								break;
 							case 4: //Alterar produto
-								alterarProduto(codigoProdutoAdmim, repositorioProduto);
+								alterarProduto(codigoProdutoAdmim, repositorioProduto, incrementoProduto);
 							case 5://Adiconar itens
 								getchar();
 								system("cls");
@@ -527,12 +528,12 @@ int main(int argc, char *argv[]) {
 								printf("Digite o código do produto: ");
 								gets(codigoProdutoAdmim);
 								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
-								
+
 								printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceRemocaoProdutoAdmin].qtd_Itens);
 								printf("Digite a quantidade de itens que serão adicionados: ");
 								scanf("%i", &qtd_ItensAdmin);
 								getchar();
-								
+
 								if(indiceRemocaoProdutoAdmin >= 0){
 									printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
 									printf("\n1 - Adicionar");
@@ -545,7 +546,7 @@ int main(int argc, char *argv[]) {
 											printf("Itens adicionados com sucesso!");
 											printf("O produto %s tem %i itens.", repositorioProduto[indiceRemocaoProdutoAdmin].nome, repositorioProduto[indiceRemocaoProdutoAdmin].qtd_Itens);
 										break;
-										case 2: break;	
+										case 2: break;
 									}
 								}
 								else{

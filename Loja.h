@@ -53,7 +53,7 @@ void printarProduto(Produto produto) {
 void printarCarrinho(Produto listaDeProdutos[], int incrementoProduto) {
 	system("cls");
 	int i;
-	float total;
+	float total = 0;
 	for(i = 0; i<incrementoProduto; i++) {
 		printarProduto(listaDeProdutos[i]);
 		total+= listaDeProdutos[i].valor;
@@ -79,7 +79,7 @@ void iniciarLoja(Produto* repositorioProduto, int incrementoProduto) {
 	do {
 		printarMenuLojaPrincipal();
 		scanf("%i",&lojaOp);
-		
+
 		switch(lojaOp){
 			case 1: //listar todos os itens da loja
 				printarTodosProdutos(repositorioProduto, incrementoProduto);
@@ -87,7 +87,7 @@ void iniciarLoja(Produto* repositorioProduto, int incrementoProduto) {
 					printarProdutoMenu();
 					gets(listaOp);
 					produtoResponse = procurarProduto(listaOp, repositorioProduto);
-					
+
 					if (strcmp(listaOp, "exit") != 0) {
 						if (produtoResponse.error == 0){
 							if(produtoResponse.produto.qtd_Itens > 0){
@@ -108,7 +108,7 @@ void iniciarLoja(Produto* repositorioProduto, int incrementoProduto) {
 						else {
 							printf("\nProduto não encontrado, por favor tente novamente\n");
 						}
-						
+
 					}
 				}while(strcmp(listaOp, "exit") != 0);
 				system("pause");
@@ -118,7 +118,7 @@ void iniciarLoja(Produto* repositorioProduto, int incrementoProduto) {
 				do{
 					printarMenuCarrinho();
 					scanf("%i",&carrinhoOp);
-					
+
 					switch(carrinhoOp) {
 						case 1:
 							break;
