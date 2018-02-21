@@ -121,10 +121,11 @@ int removerProduto(char codigo[10], Produto *repositorioProduto){ // REMOVE O PR
 	response = procurarProduto(codigo, repositorioProduto);
 	if (response.error == 0) {
         response.produto.status = 0;
-        return 0;
+        response.error = 1;
 	} else {
         return response.error;
 	}
+	return response.error;
 }
 int removerItens(char codigo[10], int qtd_Itens, Produto *repositorioProduto){
     ProductResponse response;

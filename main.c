@@ -11,6 +11,236 @@
 
 #define MAX_LEN 128
 
+void removerItensAdminMain(Produto *repositorioProduto){
+	char codigoProdutoAdmin[10];
+	int opAdcItensAdmin, qtd_ItensAdmin, indiceRemItensAdmin;
+	getchar();
+	system("cls");
+	printf("REMOVER ITENS\n");
+	printf("Digite o código do produto: ");
+	gets(codigoProdutoAdmin);
+	indiceRemItensAdmin = getIndiceProduto(codigoProdutoAdmin, repositorioProduto);
+
+	if(indiceRemItensAdmin >= 0){
+		printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceRemItensAdmin].qtd_Itens);
+		printf("Digite a quantidade de itens que serão removidos: ");
+		scanf("%i", &qtd_ItensAdmin);
+		getchar();
+		printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceRemItensAdmin].nome);
+		printf("\n1 - Remover");
+		printf("\n2 - Cancelar\n");
+		scanf("%i", &opAdcItensAdmin);
+		
+		switch(opAdcItensAdmin){
+			case 1:
+				if(repositorioProduto[indiceRemItensAdmin].qtd_Itens > qtd_ItensAdmin){
+					removerItens(codigoProdutoAdmin, qtd_ItensAdmin, repositorioProduto);
+					printf("Itens removidos com sucesso!\n");
+					printf("O produto %s tem %i itens.\n", repositorioProduto[indiceRemItensAdmin].nome, repositorioProduto[indiceRemItensAdmin].qtd_Itens);
+					system("pause");
+				}
+				else{
+					printf("Quantidade de produtos é inferior a quantidade que se quer remover!\n");
+					system("pause");
+				}
+			break;
+			case 2: 
+			break;
+		}
+		
+	}
+	else{
+		printf("Produto inexistente!");
+		system("pause");
+	}
+}
+
+void removerItensFuncionarioMain(Produto *repositorioProduto){
+	char codigoProdutoFuncionario[10];
+	int opAdcItensFuncionario, qtd_ItensFuncionario, indiceRemItensFuncionario;
+	getchar();
+	system("cls");
+	printf("REMOVER ITENS\n");
+	printf("Digite o código do produto: ");
+	gets(codigoProdutoFuncionario);
+	indiceRemItensFuncionario = getIndiceProduto(codigoProdutoFuncionario, repositorioProduto);
+
+	if(indiceRemItensFuncionario >= 0){
+		printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceRemItensFuncionario].qtd_Itens);
+		printf("Digite a quantidade de itens que serão removidos: ");
+		scanf("%i", &qtd_ItensFuncionario);
+		getchar();
+		printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceRemItensFuncionario].nome);
+		printf("\n1 - Remover");
+		printf("\n2 - Cancelar\n");
+		scanf("%i", &opAdcItensFuncionario);
+		
+		switch(opAdcItensFuncionario){
+			case 1:
+				if(repositorioProduto[indiceRemItensFuncionario].qtd_Itens > qtd_ItensFuncionario){
+					removerItens(codigoProdutoFuncionario, qtd_ItensFuncionario, repositorioProduto);
+					printf("Itens removidos com sucesso!\n");
+					printf("O produto %s tem %i itens.", repositorioProduto[indiceRemItensFuncionario].nome, repositorioProduto[indiceRemItensFuncionario].qtd_Itens);
+					system("pause");
+				}
+				else{
+					printf("Quantidade de produtos é inferior a quantidade que se quer remover!\n");
+					system("pause");
+				}
+			break;
+			case 2: 
+			break;
+		}
+		
+	}
+	else{
+		printf("Produto inexistente!");
+		system("pause");
+	}
+}
+
+void adicionarItensFuncionarioMain(Produto *repositorioProduto){
+	char codigoProdutoFuncionario[10];
+	int opAdcItensFuncionario, qtd_ItensFuncionario, indiceAdcItensFuncionario;
+	getchar();
+	system("cls");
+	printf("ADICIONAR ITENS\n");
+	printf("Digite o código do produto: ");
+	gets(codigoProdutoFuncionario);
+	indiceAdcItensFuncionario = getIndiceProduto(codigoProdutoFuncionario, repositorioProduto);
+
+	if(indiceAdcItensFuncionario >= 0){
+		printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceAdcItensFuncionario].qtd_Itens);
+		printf("Digite a quantidade de itens que serão adicionados: ");
+		scanf("%i", &qtd_ItensFuncionario);
+		getchar();
+		printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceAdcItensFuncionario].nome);
+		printf("\n1 - Adicionar");
+		printf("\n2 - Cancelar\n");
+		scanf("%i", &opAdcItensFuncionario);
+		
+		switch(opAdcItensFuncionario){
+			case 1:
+				adicionarItens(codigoProdutoFuncionario, qtd_ItensFuncionario, repositorioProduto);
+				printf("Itens adicionados com sucesso!\n");
+				printf("O produto %s tem %i itens.", repositorioProduto[indiceAdcItensFuncionario].nome, repositorioProduto[indiceAdcItensFuncionario].qtd_Itens);
+				system("pause");
+			break;
+			case 2: 
+			break;
+		}
+	}
+	else{
+		printf("Produto inexistente!");
+		system("pause");
+	}
+}
+
+void removerProdutoAdminMain(Produto *repositorioProduto){
+	char codigoProdutoAdmin[10];
+	int indiceRemocaoProdutoAdmin, opRemoverProdutoAdmin;
+	getchar();
+	printf("REMOVER PRODUTO\n");
+	printf("Digite o código do produto: ");
+	gets(codigoProdutoAdmin);
+	indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmin, repositorioProduto);
+	if(indiceRemocaoProdutoAdmin >= 0){
+		printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
+		printf("\n1 - Remover");
+		printf("\n2 - Cancelar");
+		switch(opRemoverProdutoAdmin){
+			case 1:
+				if(removerProduto(codigoProdutoAdmin, repositorioProduto) == 1){
+					printf("Produto Removido com sucesso!\n");
+					system("pause");
+				}
+				else{
+					printf("Produto já foi removido anteriormente!\n");
+					system("pause");
+				}
+			break;
+			case 2: break;
+		}
+	}
+	else{
+		printf("Produto inexistente!");
+		system("pause");
+	}
+}
+
+void removerProdutoFuncionarioMain(Produto *repositorioProduto){
+	char codigoProdutoFuncionario[10];
+	int indiceRemocaoProdutoFuncionario, opRemoverProdutoFuncionario;
+	getchar();
+	printf("REMOVER PRODUTO\n");
+	printf("Digite o código do produto: ");
+	gets(codigoProdutoFuncionario);
+
+	indiceRemocaoProdutoFuncionario = getIndiceProduto(codigoProdutoFuncionario, repositorioProduto);
+
+	if(indiceRemocaoProdutoFuncionario >= 0){
+		getchar();
+		printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoFuncionario].nome);
+		printf("\n1 - Remover");
+		printf("\n2 - Cancelar\n");
+		scanf("%i", opRemoverProdutoFuncionario);
+		switch(opRemoverProdutoFuncionario){
+			case 1:
+				if(removerProduto(codigoProdutoFuncionario, repositorioProduto) == 1){
+					printf("Produto Removido com sucesso!\n");
+					system("pause");
+				}
+				else{
+					printf("Produto já foi removido anteriormente!\n");
+					system("pause");
+				}
+			break;
+			case 2: break;
+		}
+	}
+	else{
+		printf("Produto inexistente!\n");
+		system("pause");
+	}
+}
+
+void adicionarItensMainAdmin(Produto *repositorioProduto){
+	char codigoProdutoAdmin[10];
+	int opAdcItensAdmin, qtd_ItensAdmin, indiceAdcItensAdmin;
+	getchar();
+	system("cls");
+	printf("ADICIONAR ITENS\n");
+	printf("Digite o código do produto: ");
+	gets(codigoProdutoAdmin);
+	indiceAdcItensAdmin = getIndiceProduto(codigoProdutoAdmin, repositorioProduto);
+
+	if(indiceAdcItensAdmin >= 0){
+		printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceAdcItensAdmin].qtd_Itens);
+		printf("Digite a quantidade de itens que serão adicionados: ");
+		scanf("%i", &qtd_ItensAdmin);
+		getchar();
+		printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceAdcItensAdmin].nome);
+		printf("\n1 - Adicionar");
+		printf("\n2 - Cancelar\n");
+		scanf("%i", &opAdcItensAdmin);
+		
+		switch(opAdcItensAdmin){
+			//NÃO ESTÁ FUNCIONANDO
+			case 1:
+				adicionarItens(codigoProdutoAdmin, qtd_ItensAdmin, repositorioProduto);
+				printf("Itens adicionados com sucesso!\n");
+				printf("O produto %s tem %i itens.", repositorioProduto[indiceAdcItensAdmin].nome, repositorioProduto[indiceAdcItensAdmin].qtd_Itens);
+				break;
+			break;
+			case 2: break;
+		}
+	}
+	else{
+		printf("Produto inexistente!");
+		system("pause");
+	}
+}
+
 void print_image(FILE *fptr)
 {
     char read_string[MAX_LEN];
@@ -83,6 +313,7 @@ FuncionarioResponse loginFuncionarioMain(Funcionario *repositorioFuncionario){
 		printf("\nDigite seu CPF (somente números): ");
 		gets(cpfFuncionario);
 		printf("Digite sua senha: ");
+		a=0;
 	   	do{
 	       c=getch();
 	       if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
@@ -183,7 +414,8 @@ void printarMenuAdmin() {
     printf("\n3 - Remover Produto");
     printf("\n4 - Alterar Produto");
     printf("\n5 - Adicionar Itens");
-    printf("\n6 - Logout\n");
+    printf("\n6 - Remover itens");
+    printf("\n7 - Logout\n");
 }
 
 void PrintarMenuFuncinario(){
@@ -193,7 +425,9 @@ void PrintarMenuFuncinario(){
 	printf("\n1 - Cadastrar produto");
 	printf("\n2 - Remover produto");
 	printf("\n3 - Alterar produto");
-	printf("\n4 - Voltar\n");
+	printf("\n4 - Adicionar itens");
+	printf("\n5 - Remover itens");
+	printf("\n6 - Voltar\n");
 }
 
 void criarCliente(int incrementoCliente, Cliente *repositorioCliente) {
@@ -314,7 +548,6 @@ int main(int argc, char *argv[]) {
 		int opRemoverProdutoAdmin;
 		int indiceRemocaoProdutoFuncionario;
 		int opRemoverProdutoFuncionario;
-		int qtd_ItensAdmin;
 		FuncionarioResponse funcionarioLogado;
 		int opFuncionario;
 		int i;
@@ -339,7 +572,7 @@ int main(int argc, char *argv[]) {
 							gets(cpf);
 							fflush(stdin);
 							printf("Digite sua senha: ");
-
+							a=0;	
 							do{
 					           c=getch();
 					           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
@@ -404,47 +637,30 @@ int main(int argc, char *argv[]) {
                 Produto p;
 				switch (opFuncionario)
 				{
-                    case 1:
+                    case 1://Criar Produto
                         criarProduto(incrementoProduto, repositorioProduto);  //adiciona um produto novo
                         incrementoProduto++;
                         break;
 
-                    case 2:
-                       	getchar();
-						printf("REMOVER PRODUTO\n");
-						printf("Digite o código do produto: ");
-						gets(codigoProdutoFuncionario);
-
-						indiceRemocaoProdutoFuncionario = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
-						printf("%i %i", indiceRemocaoProdutoFuncionario, codigoProdutoFuncionario);
-
-						if(indiceRemocaoProdutoFuncionario > 0){
-							getchar();
-							printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoFuncionario].nome);
-							printf("\n1 - Remover");
-							printf("\n2 - Cancelar\n");
-							scanf("%i", opRemoverProdutoFuncionario);
-							switch(opRemoverProdutoFuncionario){
-								case 1:
-									removerProduto(codigoProdutoFuncionario, repositorioProduto);
-									printf("Produto Removido com sucesso!");
-								break;
-								case 2: break;
-							}
-						}
-						else{
-							printf("Produto inexistente!");
-						}
+                    case 2://Remover Produto
+                       	removerProdutoFuncionarioMain(repositorioProduto);
                     break;
 
-                    case 3:
+                    case 3://Alterar Produto
+                    	alterarProduto(codigoProdutoFuncionario, repositorioProduto, incrementoProduto);
                         break;
                     break;
 
-                    case 4:
+                    case 4://Adicionar itens
+                    	adicionarItensFuncionarioMain(repositorioProduto);
                         break;
-                    break;
-
+                    case 5://Remover itens
+ 						removerItensFuncionarioMain(repositorioProduto);
+                    	break;
+                    case 6: //Voltar
+                    	break;
+                    default: 
+						break;
 				}
 				break;
 
@@ -458,6 +674,7 @@ int main(int argc, char *argv[]) {
 					printf("Digite o id do Administrador: ");
 					gets(idAdmin);
 					printf("Digite a senha do Administrador: ");
+					a=0;
 					do{
 			           c=getch();
 			           if(isprint(c)){       //Analisa se o valor da variável c é imprimivel
@@ -497,68 +714,22 @@ int main(int argc, char *argv[]) {
 							    incrementoProduto++;
 								break;
 							case 3: //Remover produto
-								getchar();
-								printf("REMOVER PRODUTO\n");
-								printf("Digite o código do produto: ");
-								gets(codigoProdutoAdmim);
-								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
-								if(indiceRemocaoProdutoAdmin >= 0){
-									printf("Você deseja remover o produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
-									printf("\n1 - Remover");
-									printf("\n2 - Cancelar");
-									switch(opRemoverProdutoAdmin){
-										case 1:
-											removerProduto(codigoProdutoAdmim, repositorioProduto);
-											printf("Produto Removido com sucesso!");
-										break;
-										case 2: break;
-									}
-								}
-								else{
-									printf("Produto inexistente!");
-								}
-
+								removerProdutoAdminMain(repositorioProduto);
 								break;
 							case 4: //Alterar produto
 								alterarProduto(codigoProdutoAdmim, repositorioProduto, incrementoProduto);
 							case 5://Adiconar itens
-								getchar();
-								system("cls");
-								printf("ADICIONAR ITENS\n");
-								printf("Digite o código do produto: ");
-								gets(codigoProdutoAdmim);
-								indiceRemocaoProdutoAdmin = getIndiceProduto(codigoProdutoAdmim, repositorioProduto);
-
-								printf("Existem %d itens deste produto na LOLJA!\n", repositorioProduto[indiceRemocaoProdutoAdmin].qtd_Itens);
-								printf("Digite a quantidade de itens que serão adicionados: ");
-								scanf("%i", &qtd_ItensAdmin);
-								getchar();
-
-								if(indiceRemocaoProdutoAdmin >= 0){
-									printf("Você deseja adicionar itens ao produto: %s?", repositorioProduto[indiceRemocaoProdutoAdmin].nome);
-									printf("\n1 - Adicionar");
-									printf("\n2 - Cancelar\n");
-									gets(opRemoverProdutoAdmin);
-									switch(opRemoverProdutoAdmin){
-										//NÃO ESTÁ FUNCIONANDO
-										case 1:
-											adicionarItens(codigoProdutoAdmim, qtd_ItensAdmin, repositorioProduto);
-											printf("Itens adicionados com sucesso!");
-											printf("O produto %s tem %i itens.", repositorioProduto[indiceRemocaoProdutoAdmin].nome, repositorioProduto[indiceRemocaoProdutoAdmin].qtd_Itens);
-										break;
-										case 2: break;
-									}
-								}
-								else{
-									printf("Produto inexistente!");
-								}
+								adicionarItensMainAdmin(repositorioProduto);
 								break;
-							case 6:
+							case 6://Remover itens 
+								removerItensAdminMain(repositorioProduto);
+								break;
+							case 7: 
 								break;
 							default:
 								break;
 						}
-					}while(opAdmin != 6);
+					}while(opAdmin != 7);
 				}
 			break;
 
